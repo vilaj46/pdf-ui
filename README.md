@@ -10,8 +10,13 @@ components
 
 > 1.  Component - file
 > 2.  Styles - file
-> 3.  utils - directory
+> 3.  utils - directory or file. Only extend to directory if file gets  too large.
 > 4.  components - directory
+
+   Component variables should be:
+   1. Constants
+   2. Misc
+   3. State
 
 shared
 
