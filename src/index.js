@@ -4,11 +4,6 @@ import App from "./components/App";
 
 import "xp.css/dist/XP.css";
 
-
-/**
- * Completed simple styling / onClick actions in the Dropdown menus.
- */
-
 ReactDOM.render(
   <React.StrictMode>
     <App />

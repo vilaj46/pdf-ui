@@ -10,13 +10,17 @@ components
 
 > 1.  Component - file
 > 2.  Styles - file
-> 3.  utils - directory or file. Only extend to directory if file gets  too large.
+> 3.  utils - directory or file. Only extend to directory if file gets too large.
 > 4.  components - directory
+> 5.  Local Data
 
-   Component variables should be:
-   1. Constants
-   2. Misc
-   3. State
+Component variables should be:
+
+1.  Properties
+2.  Constants
+3.  Misc
+4.  State
+5.  Organized State for sub components.
 
 shared
 
