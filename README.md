@@ -2,9 +2,24 @@
 
 ## Folder structure
 
+App will remain on the outside.
+
 components
 
-css
+> **component**
+
+> 1.  Component - file
+> 2.  Styles - file
+> 3.  utils - directory
+> 4.  components - directory
+
+shared
+
+1. css
+
+   > 1. containers
+
+2. components _see above for component structure_
 
 ## File structure
 
