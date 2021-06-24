@@ -77,7 +77,7 @@ function Header({ data, actions, headers }) {
         });
       }, HEADER_INPUT_DELAY);
     }
-  }, [textValue, startPage, endPage]);
+  }, [text, textValue, startPage, startPageValue, endPage, endPageValue, data, update]);
 
   const onChange = (e) => {
     const { name, value } = e.target;

@@ -15,7 +15,7 @@ const TopButtons = styled.div`
 function Headers({ modalState, expansionObj }) {
   // Props
   const { openModal } = modalState;
-  const { expansion, setExpansion } = expansionObj;
+  const { setExpansion } = expansionObj;
 
   // State
   const [headers, setHeaders] = React.useState([]);

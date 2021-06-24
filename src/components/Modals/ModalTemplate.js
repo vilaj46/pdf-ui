@@ -1,10 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-// Sub Components
-// import Headers from "./Headers/Headers";
-// import Expansion from "./Expansion/Expansion";
-
 const ModalContainer = styled.div`
   padding-top: 10px;
   display: flex;
@@ -12,18 +8,24 @@ const ModalContainer = styled.div`
 `;
 
 function ModalTemplate({
-  modalState,
-  Body,
-  bodyProps,
+  bodyProps = {},
+  modalState = {},
+  Body = () => {},
   expansionProps = {},
-  Expansion,
+  Expansion = () => {},
 }) {
   // Props
   const { openModal, setOpenModal } = modalState;
+
+  // Misc
   let displayExpansion = false;
-  if (Object.keys(expansionProps).length > 0) {
+
+  try {
     const { expansion } = expansionProps;
     displayExpansion = Object.keys(expansion).length > 0 ? true : false;
+  } catch {
+    // Above code fails if there is no expansionProps.
+    // Therefore, no Expansion either. displayExpansion will remain false.
   }
 
   return (

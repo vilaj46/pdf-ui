@@ -79,7 +79,7 @@ function Expansion({ expansion, setExpansion }) {
         </div>
         <BottomButtons>
           <button>OK</button>
-          <button>CANCEL</button>
+          <button onClick={() => setExpansion({})}>CANCEL</button>
         </BottomButtons>
       </div>
     </Container>
