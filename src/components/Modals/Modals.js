@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 
 // Components
 import ModalTemplate from "./ModalTemplate";
@@ -8,14 +9,16 @@ import Expansion from "./Expansion/Expansion";
 import Headers from "./Headers/Headers";
 // PageNumbers goes here.
 
-function Modals({ modalState }) {
+function Modals(props) {
   // Props
-  const { openModal } = modalState;
+  const { modalState } = props; // From the App component.
+  // const { headers } = props // From the redux store.
 
   // State
   const [expansion, setExpansion] = React.useState({});
 
   // Misc
+  const { openModal } = modalState;
   const displayModal = openModal.length > 0 ? true : false;
 
   // Organized State
@@ -27,7 +30,6 @@ function Modals({ modalState }) {
   const headerBodyObj = {
     modalState,
     expansionObj,
-    
   };
 
   return (
@@ -46,4 +48,11 @@ function Modals({ modalState }) {
 
 // Include helper function to setup templates based on the modal opened.
 
-export default Modals;
+const mapStateToProps = (state) => {
+  const { headers } = state;
+  return {
+    headers,
+  }
+}
+
+export default connect(mapStateToProps)(Modals);

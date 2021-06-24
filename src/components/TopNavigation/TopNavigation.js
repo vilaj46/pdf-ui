@@ -39,7 +39,7 @@ function TopNavigation(props) {
 const mapStateToProps = (state) => {
   const { file } = state;
   return {
-    file
+    file,
   }
 }
 

@@ -1,7 +1,11 @@
 import utils from "./utils";
+import { connect } from "react-redux";
 
 // Local Data
 import { TIME_TO_CLOSE_DROPDOWN } from "../../localData";
+
+// Actions 
+import actions from "../../../actions";
 
 /**
  * QOL:
@@ -11,15 +15,18 @@ import { TIME_TO_CLOSE_DROPDOWN } from "../../localData";
  * Will probably require a styled component.
  */
 
-function Dropdown({ data, openState }) {
-  // Props (location is where the dropdown is so we can close others in the same area.)
+function Dropdown(props) {
+  // Props 
+  // location is where the dropdown is so we can close others in the same area.
+  // This will be useful if we use this component in other places.
+  const { data } = props; // From the TopNavigation component.
   const { title, items, location } = data;
+  const { expandDropdown, closeDropdown } = props; // From the redux store.
 
   // Misc
+  // TopNavigation elements which we click to open the respected Dropdown.
+  // We will use these elements to assist in opening / closing.
   const details = Array.from(document.querySelectorAll(`.${location}`));
-
-  // State
-  const { openDropdown, setOpenDropdown } = openState;
 
   /**
    * @param {Object} e - Event object.
@@ -30,16 +37,16 @@ function Dropdown({ data, openState }) {
    * open the Dropdown and close the other one.
    */
   const toggleOpen = (e) => {
-    if (openDropdown === title) {
+    if (topNavigation.openDropdown === title) {
       utils.closeAllDropdowns(details, TIME_TO_CLOSE_DROPDOWN);
-      setOpenDropdown("");
+      closeDropdown();
     } else {
       utils.closeDropdownsAfterAnotherOpened(
         details,
         title,
         TIME_TO_CLOSE_DROPDOWN
       );
-      setOpenDropdown(title);
+      expandDropdown(title);
     }
   };
 
@@ -58,7 +65,7 @@ function Dropdown({ data, openState }) {
               const buttonClick = (e) => {
                 e.stopPropagation();
                 onClick(state);
-                setOpenDropdown("");
+                closeDropdown()
                 utils.closeAllDropdowns(details, TIME_TO_CLOSE_DROPDOWN);
               };
               return (
@@ -74,4 +81,14 @@ function Dropdown({ data, openState }) {
   );
 }
 
-export default Dropdown;
+const { topNavigation } = actions;
+const { expandDropdown, closeDropdown } = topNavigation;
+
+const mapStateToProps = (state) => {
+  const { topNavigation } = state;
+  return {
+    topNavigation,
+  }
+}
+
+export default connect(mapStateToProps, { expandDropdown, closeDropdown })(Dropdown);
