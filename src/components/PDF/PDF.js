@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 
 /**
  * Styled Component with iframe not taking.
@@ -8,14 +9,14 @@ import React from "react";
  * it would normally not close the menu. This allows
  * us to close the menu.
  */
-function PDF({ fileState, openState }) {
+function PDF({ file, openState }) {
   // Props
   const { openDropdown } = openState;
-  const { name = "", blob } = fileState.file;
+  const { name = "", blob } = file;
 
   // Misc
   const zIndex = openDropdown === "" ? "auto" : "-1";
-  const display = Object.keys(fileState) > 0 || name.length > 0 ? true : false;
+  const display = Object.keys(file) > 0 || name.length > 0 ? true : false;
 
   return (
     display && (
@@ -38,4 +39,11 @@ function PDF({ fileState, openState }) {
   );
 }
 
-export default PDF;
+const mapStateToProps = (state) => {
+  const { file } = state;
+  return {
+    file
+  }
+}
+
+export default connect(mapStateToProps)(PDF);

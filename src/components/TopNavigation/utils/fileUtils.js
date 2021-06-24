@@ -1,5 +1,5 @@
 function openFile(state) {
-  const { setFile } = state;
+  const { uploadFile } = state;
   const input = document.createElement("input");
   input.setAttribute("type", "file");
   input.setAttribute("accept", "pdf");
@@ -7,7 +7,7 @@ function openFile(state) {
     const file = e.target.files[0];
     const blob = URL.createObjectURL(file);
     const fileObject = createFileObject(file);
-    setFile({
+    uploadFile({
       ...fileObject,
       blob,
     });
@@ -31,14 +31,14 @@ function createFileObject(file) {
 }
 
 /**
- * @param {Object} state - file, setFile
+ * @param {Object} state - file, uploadFile
  *
  * If we have a file uploaded, set the file back to {}.
  */
 function closeFile(state) {
-  const { setFile, file } = state;
+  const { uploadFile, file } = state;
   if (Object.keys(file).length > 0) {
-    setFile({});
+    uploadFile({});
   }
 }
 

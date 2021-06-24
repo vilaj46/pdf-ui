@@ -14,7 +14,6 @@ function Modals({ modalState }) {
 
   // State
   const [expansion, setExpansion] = React.useState({});
-  const [headers, setHeaders] = React.useState([]);
 
   // Misc
   const displayModal = openModal.length > 0 ? true : false;

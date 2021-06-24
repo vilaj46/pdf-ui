@@ -13,7 +13,6 @@ import App from "./components/App";
 import rootReducer from "./rootReducer";
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
-console.log(store);
 
 ReactDOM.render(
   <React.StrictMode>

@@ -1,40 +1,48 @@
 import React from "react";
-import styled from "styled-components";
+import { connect } from "react-redux";
 
 // Components
-import Dropdown from "../shared/Dropdown/Dropdown";
+import Dropdown from "./Dropdown/Dropdown";
 
 // Local Data
 import localData from "./localData";
 
-const Container = styled.div`
-  display: flex;
-`;
+// Actions
+import actions from "../../actions";
 
-function TopNavigation({ openState, fileState, modalState }) {
-  let { fileObject, documentObject } = localData;
+// Utilities
+import addStateToLocalData from "./utils/addStateToLocalData";
+
+function TopNavigation(props) {
+  const { modalState, openState } = props // From the App component.
+  const { file, uploadFile, closeFile } = props; // From the redux store.
+  
+  // See local file, just the data for our dropdown menu.
+  let { fileObject, documentObject } = localData; 
+
+  // Organized State from store.
+  const fileState = {
+    file, uploadFile, closeFile
+  }
+
   fileObject = addStateToLocalData(fileState, fileObject);
   documentObject = addStateToLocalData(modalState, documentObject);
+
   return (
-    <Container className="topNavigation">
+    <div style={{display: "flex"}} className="topNavigation">
       <Dropdown data={fileObject} openState={openState} />
       <Dropdown data={documentObject} openState={openState} />
-    </Container>
+    </div>
   );
 }
 
-/**
- * @param {Object} newState - Current state value and its setter.
- * @param {Object} obj - Data object
- * @returns original object with state from our App.
- *
- * Helper function just takes the current state and
- * the setter and combines it with our data object.
- */
-function addStateToLocalData(newState, obj) {
-  const { state } = obj;
-  obj.state = { ...state, ...newState };
-  return obj;
+const mapStateToProps = (state) => {
+  const { file } = state;
+  return {
+    file
+  }
 }
 
-export default TopNavigation;
+const { fileActions }  = actions;
+
+export default connect(mapStateToProps, fileActions)(TopNavigation);
