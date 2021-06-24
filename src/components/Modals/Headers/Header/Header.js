@@ -1,6 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
+// App data
+import { HEADER_INPUT_DELAY } from "../../../localData";
+
 const Container = styled.div`
   display: flex;
   width: 100%;
@@ -36,7 +39,12 @@ const SmallButton = styled.button`
   text-align: center;
 `;
 
-function Header({ data, actions }) {
+const Invisible = styled.div`
+  pointer-events: none;
+  opacity: 0;
+`;
+
+function Header({ data, actions, headers }) {
   // Props
   const { remove, update, setExpansion } = actions;
   const { text, startPage, endPage } = data;
@@ -50,20 +58,26 @@ function Header({ data, actions }) {
   const timeoutRef = React.useRef(null); // REF TO KEEP TRACK OF THE TIMEOUT
 
   React.useEffect(() => {
-    if (timeoutRef.current !== null) {
-      clearTimeout(timeoutRef.current);
-    }
+    if (
+      text !== textValue ||
+      startPage !== startPageValue ||
+      endPage !== endPageValue
+    ) {
+      if (timeoutRef.current !== null) {
+        clearTimeout(timeoutRef.current);
+      }
 
-    timeoutRef.current = setTimeout(() => {
-      timeoutRef.current = null;
-      update({
-        ...data,
-        text: textValue,
-        startPage: startPageValue,
-        endPage: endPageValue,
-      });
-    }, 500);
-  }, [textValue]);
+      timeoutRef.current = setTimeout(() => {
+        timeoutRef.current = null;
+        update({
+          ...data,
+          text: textValue,
+          startPage: startPageValue,
+          endPage: endPageValue,
+        });
+      }, HEADER_INPUT_DELAY);
+    }
+  }, [textValue, startPage, endPage]);
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -111,14 +125,32 @@ function Header({ data, actions }) {
           onChange={(e) => onChange(e)}
         />
       </NumberContainer>
-      {displayButtons && (
-        <SmallButton onClick={() => remove(data)}>X</SmallButton>
-      )}
-      {displayButtons && (
-        <SmallButton onClick={() => setExpansion(data)}>{`>`}</SmallButton>
-      )}
+      <MouseEnterButtons
+        remove={remove}
+        setExpansion={setExpansion}
+        displayButtons={displayButtons}
+        data={data}
+      />
     </Container>
   );
+}
+
+function MouseEnterButtons({ remove, setExpansion, displayButtons, data }) {
+  if (displayButtons) {
+    return (
+      <React.Fragment>
+        <SmallButton onClick={() => remove(data)}>X</SmallButton>
+        <SmallButton onClick={() => setExpansion(data)}>{`>`}</SmallButton>
+      </React.Fragment>
+    );
+  } else {
+    return (
+      <Invisible>
+        <SmallButton onClick={() => remove(data)}>X</SmallButton>
+        <SmallButton onClick={() => setExpansion(data)}>{`>`}</SmallButton>
+      </Invisible>
+    );
+  }
 }
 
 export default Header;

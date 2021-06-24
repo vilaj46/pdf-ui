@@ -4,6 +4,9 @@ import styled from "styled-components";
 // Components
 import Header from "./Header/Header";
 
+// Local Data
+import { HEADER_INPUT_DELAY } from "../../localData";
+
 const TopButtons = styled.div`
   display: flex;
   margin-bottom: 10px;
@@ -14,17 +17,22 @@ function Headers({ modalState, expansionObj }) {
   const { openModal } = modalState;
   const { expansion, setExpansion } = expansionObj;
 
-  // Misc
-  const display = openModal === "Headers" ? true : false;
-
   // State
   const [headers, setHeaders] = React.useState([]);
+  const [disableAdd, setDisableAdd] = React.useState(false);
+
+  // Misc
+  const display = openModal === "Headers" ? true : false;
 
   const add = () => {
     const newHeader = createBlankHeader(headers);
     const newHeaders = [...headers];
     newHeaders.push(newHeader);
     setHeaders(newHeaders);
+    setDisableAdd(true);
+    setTimeout(() => {
+      setDisableAdd(false);
+    }, HEADER_INPUT_DELAY);
   };
 
   const remove = (header) => {
@@ -57,7 +65,6 @@ function Headers({ modalState, expansionObj }) {
         setHeaders(newHeaders);
       }
     }
-    console.log("UPDATING");
   };
 
   const actions = {
@@ -70,12 +77,21 @@ function Headers({ modalState, expansionObj }) {
     display && (
       <div>
         <TopButtons>
-          <button onClick={add}>Add</button>
+          <button onClick={add} disabled={disableAdd}>
+            Add
+          </button>
         </TopButtons>
         <ul>
           {headers.map((header) => {
             const { idNumber } = header;
-            return <Header data={header} key={idNumber} actions={actions} />;
+            return (
+              <Header
+                data={header}
+                key={idNumber}
+                actions={actions}
+                headers={headers}
+              />
+            );
           })}
         </ul>
       </div>
