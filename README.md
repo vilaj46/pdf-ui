@@ -18,8 +18,8 @@ Component variables should be:
 
 1.  Properties
 2.  Constants
-3.  Misc
-4.  State
+3.  State
+4.  Misc
 5.  Organized State for sub components.
 
 shared

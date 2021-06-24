@@ -1,4 +1,5 @@
-import utils from "./utils";
+import fileUtils from "./utils/fileUtils";
+// import documentUtils from "./utils/documentUtils";
 
 const fileObject = {
   title: "File",
@@ -6,13 +7,11 @@ const fileObject = {
   items: [
     {
       label: "Open",
-      onClick: (state) => utils.openFile(state),
+      onClick: (state) => fileUtils.openFile(state),
     },
     {
       label: "Close",
-      onClick: () => {
-        console.log("Youv'e clicked close.");
-      },
+      onClick: (state) => fileUtils.closeFile(state),
     },
   ],
   state: {},
@@ -24,15 +23,11 @@ const documentObject = {
   items: [
     {
       label: "Headers",
-      onClick: () => {
-        console.log("Youv'e clicked headers.");
-      },
+      onClick: (state) => state.setOpenModal("Headers"),
     },
     {
       label: "Page Numbers",
-      onClick: () => {
-        console.log("Youv'e clicked page numbers.");
-      },
+      onClick: (state) => state.setOpenModal("Page Numbers"),
     },
   ],
   state: {},

@@ -27,7 +27,7 @@ function PDF({ fileState, openState }) {
           zIndex,
           overflow: "hidden",
           height: "75%",
-          width: "75%",
+          width: "50%",
           position: "absolute",
           right: "10px",
           marginLeft: "auto",

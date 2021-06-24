@@ -11,10 +11,10 @@ const Container = styled.div`
   display: flex;
 `;
 
-function TopNavigation({ openState, fileState }) {
-  const { documentObject } = localData;
-  let { fileObject } = localData;
+function TopNavigation({ openState, fileState, modalState }) {
+  let { fileObject, documentObject } = localData;
   fileObject = addStateToLocalData(fileState, fileObject);
+  documentObject = addStateToLocalData(modalState, documentObject);
   return (
     <Container className="topNavigation">
       <Dropdown data={fileObject} openState={openState} />
@@ -23,6 +23,14 @@ function TopNavigation({ openState, fileState }) {
   );
 }
 
+/**
+ * @param {Object} newState - Current state value and its setter.
+ * @param {Object} obj - Data object
+ * @returns original object with state from our App.
+ *
+ * Helper function just takes the current state and
+ * the setter and combines it with our data object.
+ */
 function addStateToLocalData(newState, obj) {
   const { state } = obj;
   obj.state = { ...state, ...newState };

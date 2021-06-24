@@ -15,10 +15,6 @@ function openFile(state) {
   input.click();
 }
 
-const utils = {
-  openFile,
-};
-
 /**
  * @param {File} file - Newly uploaded file.
  * @return object with file properties.
@@ -34,4 +30,21 @@ function createFileObject(file) {
   return obj;
 }
 
-export default utils;
+/**
+ * @param {Object} state - file, setFile
+ *
+ * If we have a file uploaded, set the file back to {}.
+ */
+function closeFile(state) {
+  const { setFile, file } = state;
+  if (Object.keys(file).length > 0) {
+    setFile({});
+  }
+}
+
+const fileUtils = {
+  openFile,
+  closeFile,
+};
+
+export default fileUtils;
