@@ -11,14 +11,13 @@ import Headers from "./Headers/Headers";
 
 function Modals(props) {
   // Props
-  const { modalState } = props; // From the App component.
-  // const { headers } = props // From the redux store.
+  const { modals } = props; // From the redux store.
 
   // State
   const [expansion, setExpansion] = React.useState({});
 
   // Misc
-  const { openModal } = modalState;
+  const { openModal } = modals;
   const displayModal = openModal.length > 0 ? true : false;
 
   // Organized State
@@ -28,7 +27,6 @@ function Modals(props) {
   };
 
   const headerBodyObj = {
-    modalState,
     expansionObj,
   };
 
@@ -36,10 +34,9 @@ function Modals(props) {
     displayModal && (
       /** Header Modal w/ Expansion*/
       <ModalTemplate
-        modalState={modalState}
         Body={Headers}
         bodyProps={headerBodyObj}
-        expansionProps={{ ...expansionObj, ...modalState }}
+        expansionProps={expansionObj}
         Expansion={Expansion}
       />
     )
@@ -49,10 +46,11 @@ function Modals(props) {
 // Include helper function to setup templates based on the modal opened.
 
 const mapStateToProps = (state) => {
-  const { headers } = state;
+  const { headers, modals } = state;
   return {
     headers,
-  }
-}
+    modals,
+  };
+};
 
 export default connect(mapStateToProps)(Modals);

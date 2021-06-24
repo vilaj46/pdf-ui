@@ -1,12 +1,23 @@
+import { modalTypes } from "../actions/types";
+
 const initialState = {
-    openModal: "",
+  openModal: "",
 };
 
-function fileReducer(state = initialState, action) {
-    switch (action.type) {
-        default:
-            return state;
-    }
+function modalsReducer(state = initialState, action) {
+  switch (action.type) {
+    case modalTypes.EXPANDED_MODAL:
+      return {
+        ...state,
+        openModal: action.payload,
+      };
+    case modalTypes.CLOSED_MODAL:
+      return {
+        ...initialState,
+      };
+    default:
+      return state;
+  }
 }
 
-export default fileReducer;
+export default modalsReducer;

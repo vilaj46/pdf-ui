@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import styled from "styled-components";
 
 // Components
@@ -7,14 +8,17 @@ import Header from "./Header/Header";
 // Local Data
 import { HEADER_INPUT_DELAY } from "../../localData";
 
+// Utils
+import utils from "./utils";
+
 const TopButtons = styled.div`
   display: flex;
   margin-bottom: 10px;
 `;
 
-function Headers({ modalState, expansionObj }) {
+function Headers({ expansionObj, modals }) {
   // Props
-  const { openModal } = modalState;
+  const { openModal } = modals;
   const { setExpansion } = expansionObj;
 
   // State
@@ -25,7 +29,7 @@ function Headers({ modalState, expansionObj }) {
   const display = openModal === "Headers" ? true : false;
 
   const add = () => {
-    const newHeader = createBlankHeader(headers);
+    const newHeader = utils.createBlankHeader(headers);
     const newHeaders = [...headers];
     newHeaders.push(newHeader);
     setHeaders(newHeaders);
@@ -43,7 +47,7 @@ function Headers({ modalState, expansionObj }) {
       newHeaders.splice(index, 1);
       setHeaders(newHeaders);
     } else {
-      const found = findHeaderById(idNumber, headers);
+      const found = utils.findHeaderById(idNumber, headers);
       if (found !== -1) {
         newHeaders.splice(found, 1);
         setHeaders(newHeaders);
@@ -59,7 +63,7 @@ function Headers({ modalState, expansionObj }) {
       newHeaders[index] = header;
       setHeaders(newHeaders);
     } else {
-      const found = findHeaderById(idNumber, headers);
+      const found = utils.findHeaderById(idNumber, headers);
       if (found !== -1) {
         newHeaders[found] = header;
         setHeaders(newHeaders);
@@ -99,32 +103,11 @@ function Headers({ modalState, expansionObj }) {
   );
 }
 
-/**
- * @param {Array} headers - Current headers state
- * @returns new header object.
- */
-function createBlankHeader(headers) {
+const mapStateToProps = (state) => {
+  const { modals } = state;
   return {
-    text: "",
-    startPage: headers.length + 1,
-    endPage: headers.length + 1,
-    index: headers.length,
-    idNumber: Math.ceil(Math.random() * 1000000),
+    modals,
   };
-}
+};
 
-/**
- * @param {String} idNumber - id of the header we are trying to find.
- * @param {Array} headers - Current headers state.
- * @returns Number of index, -1 if not found.
- */
-function findHeaderById(idNumber, headers) {
-  headers.forEach((header, index) => {
-    if (header.idNumber === idNumber) {
-      return index;
-    }
-  });
-  return -1;
-}
-
-export default Headers;
+export default connect(mapStateToProps)(Headers);

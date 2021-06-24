@@ -9,9 +9,9 @@ import { connect } from "react-redux";
  * it would normally not close the menu. This allows
  * us to close the menu.
  */
-function PDF({ file, openState }) {
+function PDF({ file, topNavigation }) {
   // Props
-  const { openDropdown } = openState;
+  const { openDropdown } = topNavigation;
   const { name = "", blob } = file;
 
   // Misc
@@ -41,9 +41,11 @@ function PDF({ file, openState }) {
 
 const mapStateToProps = (state) => {
   const { file } = state;
+  const { topNavigation } = state;
   return {
-    file
-  }
-}
+    file,
+    topNavigation,
+  };
+};
 
 export default connect(mapStateToProps)(PDF);

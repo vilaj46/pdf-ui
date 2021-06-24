@@ -17,18 +17,11 @@ function App(props) {
   const { closeDropdown, topNavigation } = props; // From redux store.
   const { openDropdown } = topNavigation;
 
-
   // State
   // Not put into the store yet as we have no reason
   // to. They only go two levels down.
   const [openModal, setOpenModal] = React.useState("");
-  // const [openDropdown, setOpenDropdown] = React.useState("");
 
-  // Organized State for sub components.
-  // const openState = {
-  //   openDropdown,
-  //   setOpenDropdown,
-  // };
   const modalState = {
     openModal,
     setOpenModal,
@@ -36,15 +29,14 @@ function App(props) {
 
   return (
     <main
-    style={{ height: "98vh", width: "auto" }}
-      onClick={(e) => utilities.closeTopNavigation(e, topNavigation.openDropdown, closeDropdown)}    
+      style={{ height: "98vh", width: "auto" }}
+      onClick={(e) =>
+        utilities.closeTopNavigation(e, openDropdown, closeDropdown)
+      }
     >
-      <TopNavigation
-        openState={openState}
-        modalState={modalState}
-      />
+      <TopNavigation modalState={modalState} />
       <Modals modalState={modalState} />
-      <PDF openState={openState} />
+      <PDF />
     </main>
   );
 }
@@ -56,7 +48,7 @@ const mapStateToProps = (state) => {
   const { topNavigation } = state;
   return {
     topNavigation,
-  }
-}
+  };
+};
 
 export default connect(mapStateToProps, { closeDropdown })(App);

@@ -1,22 +1,23 @@
 import { topNavigationTypes } from "./types";
 
 function expandDropdown(payload) {
-    return dispatch => dispatch({
-        payload,
-        type: topNavigationTypes.EXPANDED_DROPDOWN,
-    })
+  return (dispatch) =>
+    dispatch({
+      payload,
+      type: topNavigationTypes.EXPANDED_DROPDOWN,
+    });
 }
 
 function closeDropdown() {
-    return dispatch => dispatch({
-        payload: "",
-        type: topNavigationTypes.CLOSED_DROPDOWN,
-    })
+  return (dispatch) =>
+    dispatch({
+      type: topNavigationTypes.CLOSED_DROPDOWN,
+    });
 }
 
 const actions = {
-    expandDropdown,
-    closeDropdown,
-}
+  expandDropdown,
+  closeDropdown,
+};
 
 export default actions;

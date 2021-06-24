@@ -23,11 +23,11 @@ const documentObject = {
   items: [
     {
       label: "Headers",
-      onClick: (state) => state.setOpenModal("Headers"),
+      onClick: (state) => state.expandModal("Headers"),
     },
     {
       label: "Page Numbers",
-      onClick: (state) => state.setOpenModal("Page Numbers"),
+      onClick: (state) => state.expandModal("Page Numbers"),
     },
   ],
   state: {},

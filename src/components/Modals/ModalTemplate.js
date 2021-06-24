@@ -1,5 +1,8 @@
 import React from "react";
+import { connect } from "react-redux";
 import styled from "styled-components";
+
+import actions from "../../actions";
 
 const ModalContainer = styled.div`
   padding-top: 10px;
@@ -9,13 +12,17 @@ const ModalContainer = styled.div`
 
 function ModalTemplate({
   bodyProps = {},
-  modalState = {},
+  // modalState = {},
+  modals,
+  expandModal,
+  closeModal,
   Body = () => {},
   expansionProps = {},
   Expansion = () => {},
 }) {
   // Props
-  const { openModal, setOpenModal } = modalState;
+  // const { openModal, setOpenModal } = modalState;
+  const { openModal } = modals;
 
   // Misc
   let displayExpansion = false;
@@ -37,10 +44,7 @@ function ModalTemplate({
             <div className="title-bar-controls">
               <button aria-label="Minimize"></button>
               <button aria-label="Maximize"></button>
-              <button
-                aria-label="Close"
-                onClick={() => setOpenModal("")}
-              ></button>
+              <button aria-label="Close" onClick={() => closeModal()}></button>
             </div>
           </div>
           <div className="window-body">
@@ -53,4 +57,16 @@ function ModalTemplate({
   );
 }
 
-export default ModalTemplate;
+const { modalsActions } = actions;
+const { expandModal, closeModal } = modalsActions;
+
+const mapStateToProps = (state) => {
+  const { modals } = state;
+  return {
+    modals,
+  };
+};
+
+export default connect(mapStateToProps, { expandModal, closeModal })(
+  ModalTemplate
+);
