@@ -1,5 +1,9 @@
 import React from "react";
+import { connect } from "react-redux";
 import styled from "styled-components";
+
+// Actions
+import actions from "../../../actions/modalsActions";
 
 const Container = styled.div`
   width: 100%;
@@ -15,9 +19,11 @@ const BottomButtons = styled.div`
   justify-content: space-around;
 `;
 
-function Expansion({ expansion, setExpansion }) {
+function Expansion(props) {
   // Props
-  const { text, startPage, endPage } = expansion;
+  const { modals, closeModalExpansion } = props;
+  const { expansionData } = modals;
+  const { text, startPage, endPage } = expansionData;
 
   // State
   const [textValue, setTextValue] = React.useState(text);
@@ -39,12 +45,9 @@ function Expansion({ expansion, setExpansion }) {
     <Container>
       <div className="window">
         <div className="title-bar">
-          <div className="title-bar-text">aaaa</div>
+          <div className="title-bar-text">Header Expanded</div>
           <div className="title-bar-controls">
-            <button
-              aria-label="Close"
-              onClick={() => setExpansion({})}
-            ></button>
+            <button aria-label="Close" onClick={closeModalExpansion}></button>
           </div>
         </div>
         <div className="window-body">
@@ -78,12 +81,21 @@ function Expansion({ expansion, setExpansion }) {
           </div>
         </div>
         <BottomButtons>
-          <button>OK</button>
-          <button onClick={() => setExpansion({})}>CANCEL</button>
+          <button>Ok</button>
+          <button onClick={closeModalExpansion}>Cancel</button>
         </BottomButtons>
       </div>
     </Container>
   );
 }
 
-export default Expansion;
+const { closeModalExpansion } = actions;
+
+const mapStateToProps = (state) => {
+  const { modals } = state;
+  return {
+    modals,
+  };
+};
+
+export default connect(mapStateToProps, { closeModalExpansion })(Expansion);

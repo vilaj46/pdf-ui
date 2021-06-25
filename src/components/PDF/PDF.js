@@ -11,11 +11,14 @@ import { connect } from "react-redux";
  */
 function PDF({ file, topNavigation }) {
   // Props
-  const { openDropdown } = topNavigation;
-  const { name = "", blob } = file;
+  const { openDropdown } = topNavigation; // From redux store.
+  const { name = "", blob } = file; // From redux store.
 
   // Misc
+  // Assists in making clickable when we have a Dropdown open in the TopNavigation.
   const zIndex = openDropdown === "" ? "auto" : "-1";
+
+  // Whether or not we display a PDF, depending if our file is open or not.
   const display = Object.keys(file) > 0 || name.length > 0 ? true : false;
 
   return (

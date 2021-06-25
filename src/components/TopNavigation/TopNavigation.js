@@ -10,17 +10,14 @@ import localData from "./localData";
 // Actions
 import actions from "../../actions";
 
-// Utilities
+// Utils
 import addStateToLocalData from "./utils/addStateToLocalData";
 
 function TopNavigation(props) {
-  // const { modalState } = props; // From the App component.
-  const { file, uploadFile, closeFile, expandModal } = props; // From the redux store.
+  // Redux Store Properties
+  const { file, uploadFile, closeFile, expandModal } = props;
 
-  // See local file, just the data for our dropdown menu.
-  let { fileObject, documentObject } = localData;
-
-  // Organized State from store.
+  // Organized State for Sub Component
   const fileState = {
     file,
     uploadFile,
@@ -30,6 +27,9 @@ function TopNavigation(props) {
   const modalState = {
     expandModal,
   };
+
+  // Local Data
+  let { fileObject, documentObject } = localData;
 
   fileObject = addStateToLocalData(fileState, fileObject);
   documentObject = addStateToLocalData(modalState, documentObject);
@@ -42,6 +42,8 @@ function TopNavigation(props) {
   );
 }
 
+const { fileActions, modalsActions } = actions;
+
 const mapStateToProps = (state) => {
   const { file, modals } = state;
   return {
@@ -49,8 +51,6 @@ const mapStateToProps = (state) => {
     modals,
   };
 };
-
-const { fileActions, modalsActions } = actions;
 
 export default connect(mapStateToProps, { ...fileActions, ...modalsActions })(
   TopNavigation

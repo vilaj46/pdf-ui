@@ -36,7 +36,7 @@ function Modals(props) {
       <ModalTemplate
         Body={Headers}
         bodyProps={headerBodyObj}
-        expansionProps={expansionObj}
+        // expansionProps={expansionObj}
         Expansion={Expansion}
       />
     )

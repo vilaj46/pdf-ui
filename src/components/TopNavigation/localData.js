@@ -2,12 +2,13 @@ import fileUtils from "./utils/fileUtils";
 // import documentUtils from "./utils/documentUtils";
 
 const fileObject = {
-  title: "File",
-  location: "topNavigationDetails",
+  title: "File", // Dropdown Text.
+  location: "topNavigationDetails", // Location so we know which others to close upon interaction.
   items: [
+    // Items that appear when clicked.
     {
-      label: "Open",
-      onClick: (state) => fileUtils.openFile(state),
+      label: "Open", // Button text.
+      onClick: (state) => fileUtils.openFile(state), // When we click the button.
     },
     {
       label: "Close",

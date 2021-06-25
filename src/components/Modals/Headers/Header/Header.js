@@ -4,11 +4,23 @@ import styled from "styled-components";
 // App data
 import { HEADER_INPUT_DELAY } from "../../../localData";
 
+// Components
+import MouseEnterButtons from "./MouseEnterButtons/MouseEnterButtons";
+
+// CSS
+// Was using onMouseEnter and onMouseLeave. Switched animation over to css.
+import { SmallButton } from "./MouseEnterButtons/MouseEnterButtons";
+
 const Container = styled.div`
-  display: flex;
   width: 100%;
-  justify-content: space-between;
+  display: flex;
   margin-bottom: 10px;
+  justify-content: space-between;
+
+  &:hover ${SmallButton} {
+    opacity: 1;
+    pointer-events: auto;
+  }
 `;
 
 const TextContainer = styled.div`
@@ -32,18 +44,6 @@ const NumberInput = styled.input`
   width: 100%;
 `;
 
-const SmallButton = styled.button`
-  width: 3%;
-  // min-width in xp.css was effecting width.
-  min-width: 20px;
-  text-align: center;
-`;
-
-const Invisible = styled.div`
-  pointer-events: none;
-  opacity: 0;
-`;
-
 function Header({ data, actions, headers }) {
   // Props
   const { remove, update, setExpansion } = actions;
@@ -52,7 +52,6 @@ function Header({ data, actions, headers }) {
   // State
   const [textValue, setTextValue] = React.useState(text);
   const [endPageValue, setEndPageValue] = React.useState(endPage);
-  const [displayButtons, setDisplayButtons] = React.useState(false);
   const [startPageValue, setStartPageValue] = React.useState(startPage);
 
   const timeoutRef = React.useRef(null); // REF TO KEEP TRACK OF THE TIMEOUT
@@ -77,7 +76,16 @@ function Header({ data, actions, headers }) {
         });
       }, HEADER_INPUT_DELAY);
     }
-  }, [text, textValue, startPage, startPageValue, endPage, endPageValue, data, update]);
+  }, [
+    text,
+    textValue,
+    startPage,
+    startPageValue,
+    endPage,
+    endPageValue,
+    data,
+    update,
+  ]);
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -91,16 +99,8 @@ function Header({ data, actions, headers }) {
     }
   };
 
-  const onMouseEnter = () => {
-    setDisplayButtons(true);
-  };
-
-  const onMouseLeave = () => {
-    setDisplayButtons(false);
-  };
-
   return (
-    <Container onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+    <Container>
       <TextContainer className="field-row">
         <TextInput
           type="text"
@@ -128,29 +128,10 @@ function Header({ data, actions, headers }) {
       <MouseEnterButtons
         remove={remove}
         setExpansion={setExpansion}
-        displayButtons={displayButtons}
         data={data}
       />
     </Container>
   );
-}
-
-function MouseEnterButtons({ remove, setExpansion, displayButtons, data }) {
-  if (displayButtons) {
-    return (
-      <React.Fragment>
-        <SmallButton onClick={() => remove(data)}>X</SmallButton>
-        <SmallButton onClick={() => setExpansion(data)}>{`>`}</SmallButton>
-      </React.Fragment>
-    );
-  } else {
-    return (
-      <Invisible>
-        <SmallButton onClick={() => remove(data)}>X</SmallButton>
-        <SmallButton onClick={() => setExpansion(data)}>{`>`}</SmallButton>
-      </Invisible>
-    );
-  }
 }
 
 export default Header;

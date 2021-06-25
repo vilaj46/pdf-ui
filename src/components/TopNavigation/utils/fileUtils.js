@@ -1,3 +1,9 @@
+/**
+ * @param {Object} state - file, uploadFile, closeFile. State from the redux store and actions.
+ *
+ * Temporarily open a file selection. If we choose a file,
+ * upload it!
+ */
 function openFile(state) {
   const { uploadFile } = state;
   const input = document.createElement("input");
@@ -5,12 +11,15 @@ function openFile(state) {
   input.setAttribute("accept", "pdf");
   input.addEventListener("change", async (e) => {
     const file = e.target.files[0];
-    const blob = URL.createObjectURL(file);
-    const fileObject = createFileObject(file);
-    uploadFile({
-      ...fileObject,
-      blob,
-    });
+
+    if (file.type === "application/pdf") {
+      const blob = URL.createObjectURL(file);
+      const fileObject = createFileObject(file);
+      uploadFile({
+        ...fileObject,
+        blob,
+      });
+    }
   });
   input.click();
 }

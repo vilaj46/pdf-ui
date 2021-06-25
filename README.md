@@ -1,40 +1,24 @@
 # PDF-UI
 
-## Folder structure
+## Component Structure
 
-App will remain on the outside.
+Component imports should be:
 
-components
-
-> **component**
-
-> 1.  Component - file
-> 2.  Styles - file
-> 3.  utils - directory or file. Only extend to directory if file gets too large.
-> 4.  components - directory
-> 5.  Local Data
+1. NPM Imports
+2. Components
+3. Utils
+4. Actions
+5. Local Data
 
 Component variables should be:
 
-1.  Properties
-2.  Constants
-3.  State
-4.  Misc
-5.  Organized State for sub components.
-
-shared
-
-1. css
-
-   > 1. containers
-
-2. components _see above for component structure_
-
-## File structure
-
-[imports] > imports > css > sub components > functions
-
-[functions] > utility functions > helper functions
+1.  Constants
+2.  Local Properties
+3.  Redux Store Properties
+4.  State
+5.  Organized State for Sub Component
+6.  Misc
+7.  Organized State for sub components.
 
 ## Interface design
 

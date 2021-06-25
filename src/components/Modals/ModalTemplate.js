@@ -5,30 +5,28 @@ import styled from "styled-components";
 import actions from "../../actions";
 
 const ModalContainer = styled.div`
+  position: absolute;
   padding-top: 10px;
   display: flex;
-  max-width: 70%;
+  width: 70%;
+  z-index: 10;
 `;
 
 function ModalTemplate({
   bodyProps = {},
-  // modalState = {},
   modals,
-  expandModal,
   closeModal,
   Body = () => {},
-  expansionProps = {},
+  // expansionProps = {},
   Expansion = () => {},
 }) {
   // Props
-  // const { openModal, setOpenModal } = modalState;
-  const { openModal } = modals;
+  const { openModal, expansion } = modals;
 
   // Misc
   let displayExpansion = false;
 
   try {
-    const { expansion } = expansionProps;
     displayExpansion = Object.keys(expansion).length > 0 ? true : false;
   } catch {
     // Above code fails if there is no expansionProps.
@@ -42,8 +40,8 @@ function ModalTemplate({
           <div className="title-bar">
             <div className="title-bar-text">{openModal}</div>
             <div className="title-bar-controls">
-              <button aria-label="Minimize"></button>
-              <button aria-label="Maximize"></button>
+              {/* <button aria-label="Minimize"></button> */}
+              {/* <button aria-label="Maximize"></button> */}
               <button aria-label="Close" onClick={() => closeModal()}></button>
             </div>
           </div>
@@ -52,13 +50,13 @@ function ModalTemplate({
           </div>
         </div>
       </div>
-      {displayExpansion && <Expansion {...expansionProps} />}
+      {displayExpansion && <Expansion />}
     </ModalContainer>
   );
 }
 
 const { modalsActions } = actions;
-const { expandModal, closeModal } = modalsActions;
+const { closeModal } = modalsActions;
 
 const mapStateToProps = (state) => {
   const { modals } = state;
@@ -67,6 +65,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { expandModal, closeModal })(
-  ModalTemplate
-);
+export default connect(mapStateToProps, { closeModal })(ModalTemplate);

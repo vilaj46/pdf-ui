@@ -7,35 +7,23 @@ import Modals from "./Modals/Modals";
 import TopNavigation from "./TopNavigation/TopNavigation";
 
 // Utilities
-import utilities from "./utilities";
+import utils from "./utils";
 
 // Actions
 import actions from "../actions";
 
 function App(props) {
-  // Props
-  const { closeDropdown, topNavigation } = props; // From redux store.
+  // Redux Store Properties.
+  const { closeDropdown, topNavigation } = props;
   const { openDropdown } = topNavigation;
-
-  // State
-  // Not put into the store yet as we have no reason
-  // to. They only go two levels down.
-  const [openModal, setOpenModal] = React.useState("");
-
-  const modalState = {
-    openModal,
-    setOpenModal,
-  };
 
   return (
     <main
       style={{ height: "98vh", width: "auto" }}
-      onClick={(e) =>
-        utilities.closeTopNavigation(e, openDropdown, closeDropdown)
-      }
+      onClick={(e) => utils.closeTopNavigation(e, openDropdown, closeDropdown)}
     >
-      <TopNavigation modalState={modalState} />
-      <Modals modalState={modalState} />
+      <TopNavigation />
+      <Modals />
       <PDF />
     </main>
   );
