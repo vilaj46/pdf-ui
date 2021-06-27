@@ -5,6 +5,8 @@ import styled from "styled-components";
 // Actions
 import actions from "../../../../../actions/modalsActions";
 
+// Local
+
 export const SmallButton = styled.button`
   width: 3%;
   // min-width in xp.css was effecting width.
@@ -15,24 +17,55 @@ export const SmallButton = styled.button`
 `;
 
 function MouseEnterButtons(props) {
-  const { remove, data } = props; // From Header component.
-  const { expandModalExpansion } = props; // From redux store.
+  // Local Props
+  const { remove, data } = props;
 
-  const payload = {
-    expansion: "headers",
-    expansionData: data,
+  // Redux Store Props
+  const { expandModalExpansion, closeModalExpansion, modals } = props;
+  const { expansionData } = modals;
+
+  // Misc
+  const arrow = expansionData.idNumber === data.idNumber ? `<` : `>`;
+
+  const clickExpand = () => {
+    const payload = {
+      expansion: "headers",
+      expansionData: data,
+    };
+
+    const { idNumber } = data;
+    const expansionID = expansionData.idNumber;
+
+    if (idNumber === expansionID) {
+      closeModalExpansion();
+    } else if (Object.keys(expansionData).length === 0) {
+      expandModalExpansion(payload);
+    } else {
+      closeModalExpansion();
+      setTimeout(() => {
+        expandModalExpansion(payload);
+      }, 100);
+    }
   };
 
   return (
     <React.Fragment>
       <SmallButton onClick={() => remove(data)}>X</SmallButton>
-      <SmallButton
-        onClick={() => expandModalExpansion(payload)}
-      >{`>`}</SmallButton>
+      <SmallButton onClick={clickExpand}>{arrow}</SmallButton>
     </React.Fragment>
   );
 }
 
-const { expandModalExpansion } = actions;
+const { expandModalExpansion, closeModalExpansion } = actions;
 
-export default connect(null, { expandModalExpansion })(MouseEnterButtons);
+const mapStateToProps = (state) => {
+  const { modals } = state;
+  return {
+    modals,
+  };
+};
+
+export default connect(mapStateToProps, {
+  expandModalExpansion,
+  closeModalExpansion,
+})(MouseEnterButtons);

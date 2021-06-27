@@ -95,6 +95,7 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
   const actions = {
     remove,
     update,
+    closeModalExpansion,
     expandModalExpansion,
   };
 
@@ -122,12 +123,7 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
             })}
           </ul>
         </div>
-        {displayExpansion && (
-          <Expansion
-            update={update}
-            closeModalExpansion={closeModalExpansion}
-          />
-        )}
+        {displayExpansion && <Expansion update={update} />}
       </Flex>
     )
   );

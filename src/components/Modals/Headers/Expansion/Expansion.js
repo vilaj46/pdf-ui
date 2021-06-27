@@ -23,8 +23,11 @@ const BottomButtons = styled.div`
 `;
 
 function Expansion(props) {
-  // Props
-  const { modals, closeModalExpansion, update } = props;
+  // Local Props
+  const { closeModalExpansion, update } = props;
+
+  // Redux Store Props
+  const { modals } = props;
   const { expansionData } = modals;
   const { text, startPage, endPage } = expansionData;
 

@@ -46,7 +46,7 @@ const NumberInput = styled.input`
 
 function Header({ data, actions }) {
   // Props
-  const { remove, update, setExpansion } = actions;
+  const { remove, update } = actions;
   const { text, startPage, endPage, updatedFromExpansion } = data;
 
   // State
@@ -140,11 +140,7 @@ function Header({ data, actions }) {
           onChange={(e) => onChange(e)}
         />
       </NumberContainer>
-      <MouseEnterButtons
-        remove={remove}
-        setExpansion={setExpansion}
-        data={data}
-      />
+      <MouseEnterButtons remove={remove} data={data} />
     </Container>
   );
 }
