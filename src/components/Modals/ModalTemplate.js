@@ -5,10 +5,9 @@ import styled from "styled-components";
 import actions from "../../actions";
 
 const ModalContainer = styled.div`
-  position: absolute;
-  padding-top: 10px;
   display: flex;
-  width: 70%;
+  padding-top: 10px;
+  max-width: 70%;
   z-index: 10;
 `;
 
@@ -17,7 +16,6 @@ function ModalTemplate({
   modals,
   closeModal,
   Body = () => {},
-  // expansionProps = {},
   Expansion = () => {},
 }) {
   // Props
@@ -50,7 +48,7 @@ function ModalTemplate({
           </div>
         </div>
       </div>
-      {displayExpansion && <Expansion />}
+      {/* {displayExpansion && <Expansion />} */}
     </ModalContainer>
   );
 }

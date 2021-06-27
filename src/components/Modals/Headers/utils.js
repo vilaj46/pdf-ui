@@ -9,6 +9,7 @@ function createBlankHeader(headers) {
     endPage: headers.length + 1,
     index: headers.length,
     idNumber: Math.ceil(Math.random() * 1000000),
+    updatedFromExpansion: false,
   };
 }
 

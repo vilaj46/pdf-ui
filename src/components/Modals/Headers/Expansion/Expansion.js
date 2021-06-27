@@ -3,10 +3,13 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 
 // Actions
-import actions from "../../../actions/modalsActions";
+import actions from "../../../../actions/modalsActions";
 
 const Container = styled.div`
   width: 100%;
+  position: absolute;
+  left: calc(100% + 9px);
+  top: 0;
 `;
 
 const Textarea = styled.textarea`
@@ -21,7 +24,7 @@ const BottomButtons = styled.div`
 
 function Expansion(props) {
   // Props
-  const { modals, closeModalExpansion } = props;
+  const { modals, closeModalExpansion, update } = props;
   const { expansionData } = modals;
   const { text, startPage, endPage } = expansionData;
 
@@ -41,6 +44,18 @@ function Expansion(props) {
       setEndPageValue(value);
     }
   };
+
+  const onClick = () => {
+    update({
+      ...expansionData,
+      text: textValue,
+      startPage: startPageValue,
+      endPage: endPageValue,
+      updatedFromExpansion: true,
+    });
+    closeModalExpansion();
+  };
+
   return (
     <Container>
       <div className="window">
@@ -81,7 +96,7 @@ function Expansion(props) {
           </div>
         </div>
         <BottomButtons>
-          <button>Ok</button>
+          <button onClick={onClick}>Ok</button>
           <button onClick={closeModalExpansion}>Cancel</button>
         </BottomButtons>
       </div>

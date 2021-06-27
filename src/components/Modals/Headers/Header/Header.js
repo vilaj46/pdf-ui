@@ -44,10 +44,10 @@ const NumberInput = styled.input`
   width: 100%;
 `;
 
-function Header({ data, actions, headers }) {
+function Header({ data, actions }) {
   // Props
   const { remove, update, setExpansion } = actions;
-  const { text, startPage, endPage } = data;
+  const { text, startPage, endPage, updatedFromExpansion } = data;
 
   // State
   const [textValue, setTextValue] = React.useState(text);
@@ -58,9 +58,10 @@ function Header({ data, actions, headers }) {
 
   React.useEffect(() => {
     if (
-      text !== textValue ||
-      startPage !== startPageValue ||
-      endPage !== endPageValue
+      (text !== textValue ||
+        startPage !== startPageValue ||
+        endPage !== endPageValue) &&
+      !updatedFromExpansion
     ) {
       if (timeoutRef.current !== null) {
         clearTimeout(timeoutRef.current);
@@ -73,18 +74,28 @@ function Header({ data, actions, headers }) {
           text: textValue,
           startPage: startPageValue,
           endPage: endPageValue,
+          updatedFromExpansion: false,
         });
       }, HEADER_INPUT_DELAY);
+    } else if (
+      text !== textValue ||
+      startPage !== startPageValue ||
+      endPage !== endPageValue
+    ) {
+      setTextValue(text);
+      setStartPageValue(startPage);
+      setEndPageValue(endPage);
     }
   }, [
     text,
-    textValue,
-    startPage,
-    startPageValue,
-    endPage,
-    endPageValue,
     data,
     update,
+    endPage,
+    textValue,
+    startPage,
+    endPageValue,
+    startPageValue,
+    updatedFromExpansion,
   ]);
 
   const onChange = (e) => {
@@ -96,6 +107,10 @@ function Header({ data, actions, headers }) {
       setStartPageValue(value);
     } else {
       setEndPageValue(value);
+    }
+
+    if (updatedFromExpansion) {
+      update({ ...data, updatedFromExpansion: false });
     }
   };
 
