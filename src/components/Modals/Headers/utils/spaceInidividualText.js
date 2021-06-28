@@ -1,17 +1,25 @@
 import { MAX_CHARS_PER_HEADER_LINE } from "../../../localData";
 
-function spaceInidividualText(text) {
-  const lines = createLines(text);
-  let newText = "";
+function spaceInidividualText(text, removeSpacing) {
+  if (!removeSpacing) {
+    const lines = createLines(text);
+    let newText = "";
 
-  lines.forEach((line, index) => {
-    if (index === lines.length - 1) {
-      newText = newText + line.trim();
-    } else {
-      newText = newText + line.trim() + "\n";
-    }
-  });
-  return newText;
+    lines.forEach((line, index) => {
+      if (index === lines.length - 1) {
+        newText = newText + line.trim();
+      } else {
+        newText = newText + line.trim() + "\n\n";
+      }
+    });
+    return newText;
+  } else {
+    // Remove spacing.
+    const regex = /\n/gi;
+    const noNewLines = text.replace(regex, " ");
+    const regex2 = /\s{2,}/gi;
+    return noNewLines.replace(regex2, " ");
+  }
 }
 
 function createLines(text) {

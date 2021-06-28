@@ -43,6 +43,7 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
   const [headers, setHeaders] = React.useState([]);
   const [tocText, setTocText] = React.useState("");
   const [disableAdd, setDisableAdd] = React.useState(false);
+  const [autoSpaced, setAutoSpaced] = React.useState(false);
 
   // Misc
   const display = openModal === "Headers" ? true : false;
@@ -92,13 +93,23 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
     const { index, idNumber } = header;
     const headerAtIndex = headers[index];
     const newHeaders = [...headers];
+
+    // console.log(headerAtIndex);
+    // console.log(header);
+
     if (headerAtIndex.idNumber === idNumber) {
       newHeaders[index] = header;
+      console.log("A");
+      console.log(newHeaders[index]);
       setHeaders(newHeaders);
     } else {
       const found = findHeaderById(idNumber, headers);
+
       if (found !== -1) {
+        console.log("B");
         newHeaders[found] = header;
+
+        console.log(newHeaders[found]);
         setHeaders(newHeaders);
       }
     }
@@ -109,11 +120,27 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
       const { text } = header;
       const newHeader = {
         ...header,
-        text: spaceIndividualText(text),
+        text: spaceIndividualText(text, false),
+        updatedFromExpansion: true,
       };
       return newHeader;
     });
     setHeaders(newHeaders);
+    setAutoSpaced(!autoSpaced);
+  };
+
+  const removeCurrentSpacing = () => {
+    const newHeaders = headers.map((header) => {
+      const { text } = header;
+      const newHeader = {
+        ...header,
+        text: spaceIndividualText(text, true),
+        updatedFromExpansion: true,
+      };
+      return newHeader;
+    });
+    setHeaders(newHeaders);
+    setAutoSpaced(!autoSpaced);
   };
 
   const uploadTocString = (e) => {
@@ -180,9 +207,19 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
                   <button onClick={add} disabled={disableAdd}>
                     Add
                   </button>
-                  <button onClick={spaceCurrentText} disabled={disableAdd}>
-                    Space Current Headers
-                  </button>
+                  {!autoSpaced && (
+                    <button onClick={spaceCurrentText} disabled={disableAdd}>
+                      Space Current Headers
+                    </button>
+                  )}
+                  {autoSpaced && (
+                    <button
+                      onClick={removeCurrentSpacing}
+                      disabled={disableAdd}
+                    >
+                      Remove Headers Spacing
+                    </button>
+                  )}
                 </TopButtons>
                 <ul>
                   {headers.map((header) => {

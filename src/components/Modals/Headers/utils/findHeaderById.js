@@ -4,12 +4,14 @@
  * @returns Number of index, -1 if not found.
  */
 function findHeaderById(idNumber, headers) {
+  let foundIndex = -1;
   headers.forEach((header, index) => {
     if (header.idNumber === idNumber) {
+      foundIndex = index;
       return index;
     }
   });
-  return -1;
+  return foundIndex;
 }
 
 export default findHeaderById;
