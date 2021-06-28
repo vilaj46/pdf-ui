@@ -5,19 +5,50 @@ import createBlankHeader from "./createBlankHeader";
 const ellipse = "CODE<<ELLIPSE>>CODE"
 
 function getHeadersFromTocText(tocText, headers) {
-  // Remove Table of Contents
   let tempText = removeTableOfContents(tocText);
-  // Remove Roman numerals
   tempText = removeRomanNumerals(tempText);
   tempText = removeNewLines(tempText);
-  // split by ...
-  // get text and get page number
   tempText = syncEllipses(tempText);
-  const headersAndPageNumbers = splitByEllipses(tempText);
-  const safer = saferSplit(tempText);
-  // format as headers
-  const newHeaders = createHeaders(headersAndPageNumbers, headers);
-  return newHeaders;
+
+  const headersAndPageNumbers = saferSplit(tempText, tocText);
+  // Check there are equal number of items in both arrays.
+  // Check to see if the lines we've created exist.
+  // What happens if / when we fail?
+  const headersAreGood = check(headersAndPageNumbers, tocText);
+
+  if (headersAreGood) {
+    const newHeaders = createHeaders(headersAndPageNumbers, headers);
+    return newHeaders;
+  } else {
+    return headers;
+  }
+}
+
+function check(headersAndPageNumbers, originalText) {
+  let isGood = true;
+  const { pageNumbers, text } = headersAndPageNumbers;
+  if (pageNumbers.length !== text.length) {
+    return false;
+  }
+
+  let formatted = originalText;
+  formatted = removeNewLines(formatted);
+  formatted = removeSpaces(formatted);
+  formatted = removeEllipses(formatted);
+
+  // Remove ellipses and newlines and spaces altogether.
+  text.forEach((str, index) => {
+    const pageNumber = pageNumbers[index]
+    let tempStr = removeSpaces(str);
+    tempStr = tempStr + pageNumber;
+    const indexOfStr = formatted.indexOf(tempStr);
+    if (indexOfStr === -1) {
+      isGood = false;
+      return;
+    }
+  })
+
+  return isGood;
 }
 
 function saferSplit(tocText) {
@@ -29,22 +60,59 @@ function saferSplit(tocText) {
 
   let text = [];
 
-  split.forEach(text => {
-    const trimmed = text.trim();
+  split.forEach(str => {
+    const trimmed = str.trim();
     if (trimmed.length > 0) {
       text.push(trimmed);
     }
   });
-
-  // const regex2 = // SPLIT HERE BY WORDS CODE<<ELLIPSE>> 
-  // FIGURE OUT HOW TO GET PAGE NUMBER AFTER THIS SPLIT.
+  
+  const regex2 = /CODE<<ELLIPSE>>CODE\s+?/gi
+  const split2 = tocText.split(regex2);
   
   let pageNumbers = [];
+  split2.forEach((str, index) => {
+    if (index !== 0) {
+      const trimmed = str.trim();
+      if (Number(trimmed)) {
+        // For the last entry. There is nothing afterwards.
+        pageNumbers.push(trimmed); 
+      } else {
+        // Get the first white space
+        // Check if thats a number.
+        const whiteSpace = trimmed.indexOf(" ");
+        const sliced = trimmed.slice(0, whiteSpace);
+        if (Number(sliced)) {
+          pageNumbers.push(sliced);
+        } else {
+          // If we remove too much near a number
+          // it combines the page number and the next header
+          // and doesn't really show in the textarea.
+          const pn = findPageNumberInSlice(sliced);
+          if (pn !== -1) {
+            pageNumbers.push(pn);
+          }
+        }
+      }
+    }
+  });
 
   return {
     text,
     pageNumbers,
   }
+}
+
+// Separate the early page number and text.
+function findPageNumberInSlice(text) {
+  const regex = /\D+/;
+  const split = text.split(regex);
+  const suspectedPageNumber = split[0];
+
+  if (Number(suspectedPageNumber)) {
+    return suspectedPageNumber;
+  }
+  return -1;
 }
 
 function createHeaders(headersAndPageNumbers, headers) {
@@ -67,41 +135,6 @@ function syncEllipses(tocText) {
   const regex = /\.{2,}/gi;
   const temp = tocText.replace(regex, ellipse);
   return temp;
-}
-
-function splitByEllipses(tocText) {
-  const text = [];
-  const pageNumbers = [];
-  // const split = tocText.split(/\.{2,}/);
-  const split = tocText.split(ellipse);
-
-  // Get text and get page numbers.
-  split.forEach((header, index) => {
-    const trimmed = header.trim();
-    try {
-      const whiteSpace = trimmed.search(" ");
-      const upToWhiteSpace = trimmed.slice(0, whiteSpace);
-      if (whiteSpace === -1) {
-        pageNumbers.push(trimmed); // Last entry.
-      } else if (Number(upToWhiteSpace)) {
-        pageNumbers.push(upToWhiteSpace.trim());
-        // remove number
-        const sliced = trimmed
-          .slice(upToWhiteSpace.length, trimmed.length)
-          .trim();
-        text.push(sliced);
-      } else if (!Number(upToWhiteSpace)) {
-        text.push(trimmed.trim());
-      }
-    } catch {
-      // Just continue.
-    }
-  });
-  
-  return {
-    text,
-    pageNumbers,
-  };
 }
 
 function removeTableOfContents(tocText) {
@@ -148,7 +181,17 @@ function removeRomanNumerals(tocText) {
 }
 
 function removeNewLines(text) {
-  const regex = /\n/gi;
+  const regex = /\n+/gi;
+  return text.replace(regex, "");
+}
+
+function removeEllipses(text) {
+  const regex = /\.{2,}/gi
+  return text.replace(regex, "");
+}
+
+function removeSpaces(text) {
+  const regex = /\s+/gi
   return text.replace(regex, "");
 }
 
