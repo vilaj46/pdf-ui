@@ -44,7 +44,7 @@ function MouseEnterButtons(props) {
       closeModalExpansion();
       setTimeout(() => {
         expandModalExpansion(payload);
-      }, 100);
+      });
     }
   };
 

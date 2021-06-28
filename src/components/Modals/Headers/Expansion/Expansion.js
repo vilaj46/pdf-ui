@@ -8,8 +8,8 @@ import actions from "../../../../actions/modalsActions";
 const Container = styled.div`
   width: 100%;
   position: absolute;
-  left: calc(100% + 9px);
-  top: 0;
+  left: calc(100% + 23px);
+  top: -15px;
 `;
 
 const Textarea = styled.textarea`
@@ -73,8 +73,8 @@ function Expansion(props) {
             <label htmlFor="textValue">Header Text:</label>
             <Textarea
               id="textValue"
-              rows="8"
               value={textValue}
+              rows="8"
               onChange={(e) => onChange(e)}
             />
           </div>

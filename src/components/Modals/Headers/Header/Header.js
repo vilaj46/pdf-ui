@@ -27,6 +27,7 @@ const TextContainer = styled.div`
   width: 55%;
   padding: 0;
   margin: 0;
+  border-bottom: 1px solid lightgray;
 `;
 
 const TextInput = styled.input`
@@ -35,8 +36,15 @@ const TextInput = styled.input`
   display: block;
 `;
 
+const TextArea = styled.textarea`
+  width: 100%;
+  height: 100%;
+  resize: none;
+`;
+
 const NumberContainer = styled.div`
   width: 15%;
+  border-bottom: 1px solid lightgray;
 `;
 
 const NumberInput = styled.input`
@@ -50,6 +58,8 @@ function Header({ data, actions }) {
   const { text, startPage, endPage, updatedFromExpansion } = data;
 
   // State
+  const [focused, setFocused] = React.useState(false);
+  const [entered, setEntered] = React.useState(false);
   const [textValue, setTextValue] = React.useState(text);
   const [endPageValue, setEndPageValue] = React.useState(endPage);
   const [startPageValue, setStartPageValue] = React.useState(startPage);
@@ -114,15 +124,45 @@ function Header({ data, actions }) {
     }
   };
 
+  const onMouseEnter = () => {
+    setEntered(true);
+  };
+
+  const onMouseLeave = () => {
+    if (focused) {
+      return;
+    }
+    setEntered(false);
+  };
+
+  const onFocus = () => {
+    setFocused(true);
+  };
+
+  const onBlur = () => {
+    setFocused(false);
+  };
+
   return (
-    <Container>
+    <Container onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       <TextContainer className="field-row">
-        <TextInput
-          type="text"
-          name="textValue"
-          value={textValue}
-          onChange={(e) => onChange(e)}
-        />
+        {!entered && (
+          <TextInput
+            type="text"
+            name="textValue"
+            value={textValue}
+            onChange={(e) => onChange(e)}
+          />
+        )}
+        {entered && (
+          <TextArea
+            name="textValue"
+            value={textValue}
+            onChange={(e) => onChange(e)}
+            onFocus={onFocus}
+            onBlur={onBlur}
+          ></TextArea>
+        )}
       </TextContainer>
       <NumberContainer className="field-row">
         <NumberInput
