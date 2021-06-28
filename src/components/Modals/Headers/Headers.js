@@ -12,6 +12,7 @@ import { HEADER_INPUT_DELAY } from "../../localData";
 // Utils
 import findHeaderById from "./utils/findHeaderById";
 import createBlankHeader from "./utils/createBlankHeader";
+import spaceIndividualText from "./utils/spaceInidividualText";
 import getHeadersFromTocText from "./utils/getHeadersFromTocText";
 
 import actions from "../../../actions/modalsActions";
@@ -104,7 +105,15 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
   };
 
   const spaceCurrentText = () => {
-    console.log("SPACE TEXT!");
+    const newHeaders = headers.map((header) => {
+      const { text } = header;
+      const newHeader = {
+        ...header,
+        text: spaceIndividualText(text),
+      };
+      return newHeader;
+    });
+    setHeaders(newHeaders);
   };
 
   const uploadTocString = (e) => {
@@ -113,7 +122,11 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
   };
 
   const addTocHeaders = () => {
-    const tocHeaders = getHeadersFromTocText(tocText);
+    const tocHeaders = getHeadersFromTocText(tocText, headers);
+    const newHeaders = headers.concat(tocHeaders);
+    setHeaders(newHeaders);
+    setTocText("");
+    setTab("tab-A");
   };
 
   const changeTab = (t) => {
@@ -170,7 +183,6 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
                   <button onClick={spaceCurrentText} disabled={disableAdd}>
                     Space Current Headers
                   </button>
-                  <button>Table of Contents String</button>
                 </TopButtons>
                 <ul>
                   {headers.map((header) => {

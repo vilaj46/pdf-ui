@@ -1,12 +1,33 @@
-function getHeadersFromTocText(tocText) {
+import createBlankHeader from "./createBlankHeader";
+
+function getHeadersFromTocText(tocText, headers) {
   // Remove Table of Contents
   let tempText = removeTableOfContents(tocText);
   // Remove Roman numerals
   tempText = removeRomanNumerals(tempText);
   tempText = removeNewLines(tempText);
   // split by ...
-  tempText = splitByEllipses(tempText);
   // get text and get page number
+  const headersAndPageNumbers = splitByEllipses(tempText);
+  // format as headers
+  const newHeaders = createHeaders(headersAndPageNumbers, headers);
+  return newHeaders;
+}
+
+function createHeaders(headersAndPageNumbers, headers) {
+  const { text, pageNumbers } = headersAndPageNumbers;
+  const newHeaders = text.map((header, index) => {
+    const pageNumber = pageNumbers[index];
+    const newHeader = createBlankHeader(
+      headers,
+      header,
+      pageNumber,
+      pageNumber
+    );
+    return newHeader;
+  });
+
+  return newHeaders;
 }
 
 function splitByEllipses(tocText) {
@@ -17,15 +38,13 @@ function splitByEllipses(tocText) {
   // Get text and get page numbers.
   split.forEach((header, index) => {
     const trimmed = header.trim();
-    // Find the first white space.
-    // Check if the text up to the white space is a number.
-    // If not a number, add to the headers.
-    // If it is a number, add the number to the pageNumbers.
     try {
       const whiteSpace = trimmed.search(" ");
       const upToWhiteSpace = trimmed.slice(0, whiteSpace);
-      if (Number(upToWhiteSpace)) {
-        pageNumbers.push(upToWhiteSpace);
+      if (whiteSpace === -1) {
+        pageNumbers.push(trimmed); // Last entry.
+      } else if (Number(upToWhiteSpace)) {
+        pageNumbers.push(upToWhiteSpace.trim());
         // remove number
         const sliced = trimmed
           .slice(upToWhiteSpace.length, trimmed.length)
@@ -38,8 +57,11 @@ function splitByEllipses(tocText) {
       // Just continue.
     }
   });
-  console.log(text);
-  return tocText;
+
+  return {
+    text,
+    pageNumbers,
+  };
 }
 
 function removeTableOfContents(tocText) {
