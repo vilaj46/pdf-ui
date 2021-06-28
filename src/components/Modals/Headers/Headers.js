@@ -94,22 +94,14 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
     const headerAtIndex = headers[index];
     const newHeaders = [...headers];
 
-    // console.log(headerAtIndex);
-    // console.log(header);
-
     if (headerAtIndex.idNumber === idNumber) {
       newHeaders[index] = header;
-      console.log("A");
-      console.log(newHeaders[index]);
       setHeaders(newHeaders);
     } else {
       const found = findHeaderById(idNumber, headers);
 
       if (found !== -1) {
-        console.log("B");
         newHeaders[found] = header;
-
-        console.log(newHeaders[found]);
         setHeaders(newHeaders);
       }
     }
