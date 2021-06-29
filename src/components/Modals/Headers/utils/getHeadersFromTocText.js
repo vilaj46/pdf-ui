@@ -1,8 +1,8 @@
 import createBlankHeader from "./createBlankHeader";
 
-// If we ever change this value, 
+// If we ever change this value,
 // make sure we also change it in the safer split regex.
-const ellipse = "CODE<<ELLIPSE>>CODE"
+const ellipse = "CODE<<ELLIPSE>>CODE";
 
 function getHeadersFromTocText(tocText, headers) {
   let tempText = removeTableOfContents(tocText);
@@ -11,9 +11,6 @@ function getHeadersFromTocText(tocText, headers) {
   tempText = syncEllipses(tempText);
 
   const headersAndPageNumbers = saferSplit(tempText, tocText);
-  // Check there are equal number of items in both arrays.
-  // Check to see if the lines we've created exist.
-  // What happens if / when we fail?
   const headersAreGood = check(headersAndPageNumbers, tocText);
 
   if (headersAreGood) {
@@ -38,7 +35,7 @@ function check(headersAndPageNumbers, originalText) {
 
   // Remove ellipses and newlines and spaces altogether.
   text.forEach((str, index) => {
-    const pageNumber = pageNumbers[index]
+    const pageNumber = pageNumbers[index];
     let tempStr = removeSpaces(str);
     tempStr = tempStr + pageNumber;
     const indexOfStr = formatted.indexOf(tempStr);
@@ -46,7 +43,7 @@ function check(headersAndPageNumbers, originalText) {
       isGood = false;
       return;
     }
-  })
+  });
 
   return isGood;
 }
@@ -60,23 +57,23 @@ function saferSplit(tocText) {
 
   let text = [];
 
-  split.forEach(str => {
+  split.forEach((str) => {
     const trimmed = str.trim();
     if (trimmed.length > 0) {
       text.push(trimmed);
     }
   });
-  
-  const regex2 = /CODE<<ELLIPSE>>CODE\s+?/gi
+
+  const regex2 = /CODE<<ELLIPSE>>CODE\s+?/gi;
   const split2 = tocText.split(regex2);
-  
+
   let pageNumbers = [];
   split2.forEach((str, index) => {
     if (index !== 0) {
       const trimmed = str.trim();
       if (Number(trimmed)) {
         // For the last entry. There is nothing afterwards.
-        pageNumbers.push(trimmed); 
+        pageNumbers.push(trimmed);
       } else {
         // Get the first white space
         // Check if thats a number.
@@ -100,7 +97,7 @@ function saferSplit(tocText) {
   return {
     text,
     pageNumbers,
-  }
+  };
 }
 
 // Separate the early page number and text.
@@ -186,12 +183,12 @@ function removeNewLines(text) {
 }
 
 function removeEllipses(text) {
-  const regex = /\.{2,}/gi
+  const regex = /\.{2,}/gi;
   return text.replace(regex, "");
 }
 
 function removeSpaces(text) {
-  const regex = /\s+/gi
+  const regex = /\s+/gi;
   return text.replace(regex, "");
 }
 

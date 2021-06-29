@@ -1,10 +1,10 @@
 import React from "react";
 import "xp.css/dist/XP.css";
 import ReactDOM from "react-dom";
-import { createStore, applyMiddleware } from "redux"; 
+import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
-import {composeWithDevTools} from "redux-devtools-extension";
+import { composeWithDevTools } from "redux-devtools-extension";
 
 // Components
 import App from "./components/App";
@@ -12,7 +12,13 @@ import App from "./components/App";
 // Reducers
 import rootReducer from "./rootReducer";
 
-const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
+// Index Headers Utils
+// Break up Tabs in the headers
+
+const store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(thunk))
+);
 
 ReactDOM.render(
   <React.StrictMode>

@@ -5,6 +5,7 @@ import styled from "styled-components";
 // Components
 import Header from "./Header/Header";
 import Expansion from "./Expansion/Expansion";
+import QuickSpacing from "./QuickSpacing/QuickSpacing";
 
 // Local Data
 import { HEADER_INPUT_DELAY } from "../../localData";
@@ -234,7 +235,7 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
         )}
         {tab === "tab-B" && (
           <article role="tabpanel" id="tab-B">
-            <p>Quick Headers</p>
+            <QuickSpacing headers={headers} update={update} />
           </article>
         )}
         {tab === "tab-C" && (
