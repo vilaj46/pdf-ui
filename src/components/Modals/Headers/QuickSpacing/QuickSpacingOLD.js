@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
+// Git was not adding code for some reason.
+
 const Item = styled.li`
   border: 1px solid lightgray;
   list-style-type: none;
@@ -31,7 +33,6 @@ const Input = styled.input`
 
 function QuickSpacing(props) {
   const { headers, update } = props;
-
   return (
     <div>
       {headers.map((header) => {
@@ -67,32 +68,14 @@ function HeaderForSpacing(props) {
     update(newHeader);
   };
 
-  const addLine = (beforeText, afterText, position) => {
+  const addLine = (beforeText, afterText, position, selectionStart) => {
     // Insert blank line above current position.
-    if (beforeText.length === 0) {
-      lines.splice(position, 0, "");
-      update({
-        ...header,
-        text: "\n\n" + header.text,
-      });
-    } else if (afterText.length === 0) {
-      lines.push("");
-      update({
-        ...header,
-        text: header.text + "\n\n",
-      });
-    } else {
-      lines[position] = beforeText;
-      lines.splice(position + 1, 0, afterText);
-      const indexOfAfterText = header.text.indexOf(afterText);
-      const rest = header.text.slice(
-        indexOfAfterText + afterText.length,
-        header.text.length
-      );
-      update({
-        ...header,
-        text: beforeText + "\n\n\n" + afterText + "\n" + rest,
-      });
+    if (selectionStart === 0) {
+      if (position === 0) {
+        lines.unshift("");
+        console.log(lines);
+        setLines(lines);
+      }
     }
   };
 
@@ -129,7 +112,7 @@ function HeaderLine(props) {
         .slice(selectionStart, textValue.length)
         .trim();
       setTextValue(beforeEnter);
-      addLine(beforeEnter, afterEnter, index);
+      addLine(beforeEnter, afterEnter, index, selectionStart);
       // Add line to this Header
       // Add \n to this text
     }
@@ -146,14 +129,8 @@ function HeaderLine(props) {
   };
 
   if (!focused) {
-    const border = textValue.length <= 0 ? "1px solid lightgray" : "none";
-
     return (
-      <Line
-        style={{ border }}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-      >
+      <Line onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}>
         {text}
       </Line>
     );
@@ -173,14 +150,14 @@ function HeaderLine(props) {
 }
 
 function createLines(text) {
-  const newLines = /\n{2,}/gi;
-  // text = text.replace(newLines, "\n");
   const regex = /\n/gi;
-  const split = text.split(newLines);
+  const split = text.split(regex);
   let lines = [];
   split.forEach((line) => {
     const trimmed = line.trim();
-    lines.push(trimmed);
+    if (trimmed.length > 0) {
+      lines.push(trimmed);
+    }
   });
   return lines;
 }
