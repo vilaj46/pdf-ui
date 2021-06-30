@@ -38,6 +38,7 @@ function QuickSpacing(props) {
         const { text } = header;
 
         const createdLines = createLines(text);
+        // console.log(createdLines);
         return (
           <HeaderForSpacing
             header={header}
@@ -53,11 +54,6 @@ function QuickSpacing(props) {
 
 function HeaderForSpacing(props) {
   const { header, update, createdLines } = props;
-  const [lines, setLines] = React.useState(createdLines);
-  // Split lines into <p>
-  // If we hit enter add a <p> below current ones.
-  // Add a remove line filter that will pull up the current
-  // text in the above line.
 
   const customUpdate = (newText) => {
     const newHeader = {
@@ -70,35 +66,38 @@ function HeaderForSpacing(props) {
   const addLine = (beforeText, afterText, position) => {
     // Insert blank line above current position.
     if (beforeText.length === 0) {
-      lines.splice(position, 0, "");
+      const indexOfAfterText = header.text.indexOf(afterText);
+      const restBefore = header.text.slice(0, indexOfAfterText);
+      const restAfter = header.text.slice(indexOfAfterText, header.text.length);
+
       update({
         ...header,
-        text: "\n\n" + header.text,
+        text: restBefore + "\n \n\n" + restAfter,
       });
     } else if (afterText.length === 0) {
-      lines.push("");
+      // Insert Blank line after current position.
       update({
         ...header,
         text: header.text + "\n\n",
       });
     } else {
-      lines[position] = beforeText;
-      lines.splice(position + 1, 0, afterText);
+      const indexOfBeforeText = header.text.indexOf(beforeText);
       const indexOfAfterText = header.text.indexOf(afterText);
-      const rest = header.text.slice(
+      const restAfter = header.text.slice(
         indexOfAfterText + afterText.length,
         header.text.length
       );
+      const restBefore = header.text.slice(0, indexOfBeforeText);
       update({
         ...header,
-        text: beforeText + "\n\n\n" + afterText + "\n" + rest,
+        text: restBefore + beforeText + "\n\n" + afterText + restAfter,
       });
     }
   };
 
   return (
     <Item>
-      {lines.map((line, index) => {
+      {createdLines.map((line, index) => {
         return (
           <HeaderLine
             text={line}
@@ -114,7 +113,7 @@ function HeaderForSpacing(props) {
 }
 
 function HeaderLine(props) {
-  const { text, update, index, addLine } = props;
+  const { text, index, addLine } = props;
   const [focused, setFocused] = React.useState(false);
   const [textValue, setTextValue] = React.useState(text);
 
@@ -122,27 +121,18 @@ function HeaderLine(props) {
     const { keyCode } = e;
     const { selectionStart } = e.target;
     if (keyCode === 13) {
-      // selectionStart:end
-      // Change this textValue to everything before selectionStart
       const beforeEnter = textValue.slice(0, selectionStart).trim();
       const afterEnter = textValue
         .slice(selectionStart, textValue.length)
         .trim();
       setTextValue(beforeEnter);
       addLine(beforeEnter, afterEnter, index);
-      // Add line to this Header
-      // Add \n to this text
     }
   };
 
   const onChange = (e) => {
     const { value } = e.target;
     setTextValue(value);
-  };
-
-  const onBlur = () => {
-    setFocused(false);
-    // update(textValue);
   };
 
   if (!focused) {
@@ -165,7 +155,7 @@ function HeaderLine(props) {
         autoFocus={true}
         onKeyDown={(e) => onKeyPress(e)}
         onChange={(e) => onChange(e)}
-        onBlur={onBlur}
+        onBlur={() => setFocused(false)}
         rows="0"
       />
     );
@@ -174,14 +164,16 @@ function HeaderLine(props) {
 
 function createLines(text) {
   const newLines = /\n{2,}/gi;
-  // text = text.replace(newLines, "\n");
-  const regex = /\n/gi;
   const split = text.split(newLines);
+  if (text.includes("Statement")) {
+    console.log(text);
+  }
   let lines = [];
   split.forEach((line) => {
     const trimmed = line.trim();
     lines.push(trimmed);
   });
+
   return lines;
 }
 
