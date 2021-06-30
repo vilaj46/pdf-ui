@@ -12,8 +12,11 @@ import App from "./components/App";
 // Reducers
 import rootReducer from "./rootReducer";
 
-// Index Headers Utils
-// Break up Tabs in the headers
+// Clean up QuickSpacing file.
+// Remove a line inbetween
+// Features to be added: Reset header.
+// After deleting one line whose header is only one line.
+// We cannot add text to it.
 
 const store = createStore(
   rootReducer,

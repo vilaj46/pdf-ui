@@ -29,6 +29,26 @@ const Input = styled.input`
   overflow-x: scroll;
 `;
 
+const ResetButton = styled.button`
+  min-width: 10px;
+  min-height: 10px;
+  display: block;
+  margin-left: auto;
+`;
+
+const LineFlex = styled.div`
+  display: flex;
+`;
+
+const RemoveButton = styled.button`
+  display: block;
+  min-width: 10px;
+  min-height: 10px;
+  max-height: 20px;
+  margin-top: auto;
+  margin-bottom: auto;
+`;
+
 function QuickSpacing(props) {
   const { headers, update } = props;
 
@@ -38,7 +58,6 @@ function QuickSpacing(props) {
         const { text } = header;
 
         const createdLines = createLines(text);
-        // console.log(createdLines);
         return (
           <HeaderForSpacing
             header={header}
@@ -63,7 +82,7 @@ function HeaderForSpacing(props) {
     update(newHeader);
   };
 
-  const addLine = (beforeText, afterText, position) => {
+  const addLine = (beforeText, afterText) => {
     // Insert blank line above current position.
     if (beforeText.length === 0) {
       const indexOfAfterText = header.text.indexOf(afterText);
@@ -95,8 +114,61 @@ function HeaderForSpacing(props) {
     }
   };
 
+  const resetSpacing = () => {
+    const regex = /\n/gi;
+    const { text } = header;
+    let newText = text.replace(regex, " ");
+    const regex2 = /\s{2,}/gi;
+    newText = newText.replace(regex2, " ");
+    const newHeader = {
+      ...header,
+      text: newText,
+    };
+    update(newHeader);
+  };
+
+  const removeLine = (index) => {
+    // We've removed a header with one line.
+    if (createdLines.length === 1) {
+      update({
+        ...header,
+        text: "",
+      });
+    } else if (index === createdLines.length - 1) {
+      // We've removed the end of the header.
+      const { text } = header;
+      const textForRemoval = createdLines[index];
+      const indexOfRemoval = text.indexOf(textForRemoval);
+      let newText = text.slice(0, indexOfRemoval);
+
+      while (newText.endsWith("\n")) {
+        newText = newText.slice(0, newText.length - 1);
+      }
+
+      update({
+        ...header,
+        text: newText,
+      });
+    } else {
+      // Removed a line inbetween.
+      const { text } = header;
+      const textForRemoval = createdLines[index];
+      const indexOfRemoval = text.indexOf(textForRemoval);
+      const beforeText = text.slice(0, indexOfRemoval);
+      const afterText = text.slice(
+        indexOfRemoval + textForRemoval.length,
+        text.length
+      );
+      console.log(beforeText);
+      console.log(afterText);
+    }
+  };
+
   return (
     <Item>
+      <ResetButton title="Reset" onClick={resetSpacing}>
+        R
+      </ResetButton>
       {createdLines.map((line, index) => {
         return (
           <HeaderLine
@@ -105,6 +177,7 @@ function HeaderForSpacing(props) {
             update={customUpdate}
             index={index}
             addLine={addLine}
+            removeLine={removeLine}
           />
         );
       })}
@@ -113,7 +186,7 @@ function HeaderForSpacing(props) {
 }
 
 function HeaderLine(props) {
-  const { text, index, addLine } = props;
+  const { text, index, addLine, removeLine } = props;
   const [focused, setFocused] = React.useState(false);
   const [textValue, setTextValue] = React.useState(text);
 
@@ -126,13 +199,26 @@ function HeaderLine(props) {
         .slice(selectionStart, textValue.length)
         .trim();
       setTextValue(beforeEnter);
-      addLine(beforeEnter, afterEnter, index);
+      addLine(beforeEnter, afterEnter);
     }
   };
 
   const onChange = (e) => {
     const { value } = e.target;
     setTextValue(value);
+  };
+
+  const onBlur = (e) => {
+    try {
+      const { title } = e.relatedTarget;
+      if (title === "Remove") {
+        removeLine(index);
+      }
+    } catch {
+      // We didn't click anything special.
+    }
+
+    setFocused(false);
   };
 
   if (!focused) {
@@ -149,15 +235,21 @@ function HeaderLine(props) {
     );
   } else {
     return (
-      <Input
-        type="text"
-        value={textValue}
-        autoFocus={true}
-        onKeyDown={(e) => onKeyPress(e)}
-        onChange={(e) => onChange(e)}
-        onBlur={() => setFocused(false)}
-        rows="0"
-      />
+      <LineFlex onClick={() => console.log("argh!")}>
+        <Input
+          type="text"
+          value={textValue}
+          autoFocus={true}
+          onKeyDown={(e) => onKeyPress(e)}
+          onChange={(e) => onChange(e)}
+          // onBlur={() => setFocused(false)}
+          onBlur={(e) => onBlur(e)}
+          rows="0"
+        />
+        <RemoveButton title="Remove" onClick={() => console.log("CLICKED")}>
+          x
+        </RemoveButton>
+      </LineFlex>
     );
   }
 }
@@ -165,9 +257,6 @@ function HeaderLine(props) {
 function createLines(text) {
   const newLines = /\n{2,}/gi;
   const split = text.split(newLines);
-  if (text.includes("Statement")) {
-    console.log(text);
-  }
   let lines = [];
   split.forEach((line) => {
     const trimmed = line.trim();
