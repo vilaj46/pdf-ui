@@ -1,11 +1,29 @@
 import React from "react";
 
+import { HEADER_INPUT_DELAY } from "../../../../../localData";
+
 import { LineFlex, Input, RemoveButton, Line } from "../../Styles";
 
 function HeaderLine(props) {
   const { text, index, addLine, removeLine, update } = props;
   const [focused, setFocused] = React.useState(false);
   const [textValue, setTextValue] = React.useState(text);
+
+  const timeoutRef = React.useRef(null); // REF TO KEEP TRACK OF THE TIMEOUT
+
+  React.useEffect(() => {
+    if (text !== textValue) {
+      if (timeoutRef.current !== null) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        timeoutRef.current = null;
+        // console.log(textValue);
+        update(textValue, index);
+      }, HEADER_INPUT_DELAY);
+    }
+  });
 
   const onKeyPress = (e) => {
     const { keyCode } = e;
@@ -23,7 +41,6 @@ function HeaderLine(props) {
   const onChange = (e) => {
     const { value } = e.target;
     setTextValue(value);
-    update(value);
   };
 
   const onBlur = (e) => {

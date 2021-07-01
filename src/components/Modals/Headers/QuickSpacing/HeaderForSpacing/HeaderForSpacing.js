@@ -5,10 +5,26 @@ import HeaderLine from "./HeaderLine/HeaderLine";
 function HeaderForSpacing(props) {
   const { header, update, createdLines, remove } = props;
 
-  const customUpdate = (newText) => {
+  const customUpdate = (newText, index) => {
+    let newStr = "";
+    createdLines.forEach((line, i) => {
+      if (i === createdLines.length - 1) {
+        if (i === index) {
+          newStr = newStr + newText;
+        } else {
+          newStr = newStr + line;
+        }
+      } else {
+        if (i === index) {
+          newStr = newStr + newText + "\n\n";
+        } else {
+          newStr = newStr + line + "\n\n";
+        }
+      }
+    });
     const newHeader = {
       ...header,
-      text: newText,
+      text: newStr,
     };
     update(newHeader);
   };

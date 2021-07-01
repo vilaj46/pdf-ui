@@ -1,11 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import styled from "styled-components";
 
 // Components
+import TOCTab from "./Tabs/TOCTab";
 import MainTab from "./Tabs/MainTab";
+import SpacingTab from "./Tabs/SpacingTab";
 import TabButton from "./TabButton/TabButton";
-import QuickSpacing from "./QuickSpacing/QuickSpacing";
 
 // Local Data
 import { HEADER_INPUT_DELAY } from "../../localData";
@@ -17,13 +17,6 @@ import spaceIndividualText from "./utils/spaceIndividualText";
 import getHeadersFromTocText from "./utils/getHeadersFromTocText";
 
 import actions from "../../../actions/modalsActions";
-
-const TableOfContentsTextArea = styled.textarea`
-  width: 100%;
-  height: 100%;
-  resize: vertical;
-  border: 1px solid lightgray;
-`;
 
 function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
   // Props
@@ -174,7 +167,7 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
     const newHeaders = headers.concat(tocHeaders);
     setHeaders(newHeaders);
     setTocText("");
-    setTab("tab-A");
+    setTab("tab-Main");
   };
 
   /**
@@ -209,13 +202,13 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
           />
           <TabButton
             text="Spacing"
-            label="tab-B"
+            label="tab-Spacing"
             onClick={changeTab}
             tab={tab}
           />
           <TabButton
             text="Table of Contents"
-            label="tab-C"
+            label="tab-TOC"
             onClick={changeTab}
             tab={tab}
           />
@@ -233,21 +226,15 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
             removeCurrentSpacing={removeCurrentSpacing}
           />
         )}
-        {tab === "tab-B" && (
-          <article role="tabpanel" id="tab-B">
-            <QuickSpacing headers={headers} update={update} remove={remove} />
-          </article>
+        {tab === "tab-Spacing" && (
+          <SpacingTab headers={headers} update={update} remove={remove} />
         )}
-        {tab === "tab-C" && (
-          <article role="tabpanel" id="tab-C">
-            <label htmlFor="tocString">Table of Contents String:</label>
-            <TableOfContentsTextArea
-              htmlFor="tocString"
-              value={tocText}
-              onChange={(e) => uploadTocString(e)}
-            />
-            <button onClick={addTocHeaders}>Ok</button>
-          </article>
+        {tab === "tab-TOC" && (
+          <TOCTab
+            tocText={tocText}
+            uploadTocString={uploadTocString}
+            addTocHeaders={addTocHeaders}
+          />
         )}
       </section>
     )
