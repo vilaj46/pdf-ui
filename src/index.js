@@ -13,10 +13,6 @@ import App from "./components/App";
 import rootReducer from "./rootReducer";
 
 // Clean up QuickSpacing file.
-// Remove a line inbetween
-// Features to be added: Reset header.
-// After deleting one line whose header is only one line.
-// We cannot add text to it.
 
 const store = createStore(
   rootReducer,

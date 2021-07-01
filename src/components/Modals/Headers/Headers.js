@@ -13,7 +13,7 @@ import { HEADER_INPUT_DELAY } from "../../localData";
 // Utils
 import findHeaderById from "./utils/findHeaderById";
 import createBlankHeader from "./utils/createBlankHeader";
-import spaceIndividualText from "./utils/spaceInidividualText";
+import spaceIndividualText from "./utils/spaceIndividualText";
 import getHeadersFromTocText from "./utils/getHeadersFromTocText";
 
 import actions from "../../../actions/modalsActions";
@@ -58,6 +58,12 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
     // Therefore, no Expansion either. displayExpansion will remain false.
   }
 
+  /**
+   * Creates a new header with no text.
+   * Inserts at the end of the headers list.
+   * We disable the add button because we were getting
+   * updating ui bugs.
+   */
   const add = () => {
     const newHeader = createBlankHeader(headers);
     const newHeaders = [...headers];
@@ -69,6 +75,14 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
     }, HEADER_INPUT_DELAY);
   };
 
+  /**
+   * @param {Object} header - Header object for deletion.
+   * Check if the header we want to remove is still
+   * at it's current index. If it isn't search for it.
+   *
+   * If we have have the Expansion open for the
+   * Header we are deleting, close the Expansion.
+   */
   const remove = (header) => {
     const { index, idNumber } = header;
     const headerAtIndex = headers[index];
@@ -90,6 +104,11 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
     }
   };
 
+  /**
+   * @param {Object} header - Header object we are updating.
+   * We don't know what we are updating. Use the
+   * index or the idNumber to find the header and replace.
+   */
   const update = (header) => {
     const { index, idNumber } = header;
     const headerAtIndex = headers[index];
@@ -108,6 +127,11 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
     }
   };
 
+  /**
+   * We've clicked "Spaced Current Headers".
+   * Iterare through the current headers
+   * and update the text.
+   */
   const spaceCurrentText = () => {
     const newHeaders = headers.map((header) => {
       const { text } = header;
@@ -235,7 +259,7 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
         )}
         {tab === "tab-B" && (
           <article role="tabpanel" id="tab-B">
-            <QuickSpacing headers={headers} update={update} />
+            <QuickSpacing headers={headers} update={update} remove={remove} />
           </article>
         )}
         {tab === "tab-C" && (
