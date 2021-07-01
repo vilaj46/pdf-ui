@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 
 // Components
-import Header from "./Header/Header";
-import Expansion from "./Expansion/Expansion";
+import MainTab from "./Tabs/MainTab";
+import TabButton from "./TabButton/TabButton";
 import QuickSpacing from "./QuickSpacing/QuickSpacing";
 
 // Local Data
@@ -17,16 +17,6 @@ import spaceIndividualText from "./utils/spaceIndividualText";
 import getHeadersFromTocText from "./utils/getHeadersFromTocText";
 
 import actions from "../../../actions/modalsActions";
-
-const TopButtons = styled.div`
-  display: flex;
-  margin-bottom: 10px;
-  justify-content: space-between;
-`;
-
-const Flex = styled.div`
-  position: relative;
-`;
 
 const TableOfContentsTextArea = styled.textarea`
   width: 100%;
@@ -146,6 +136,9 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
     setAutoSpaced(!autoSpaced);
   };
 
+  /**
+   * Remove the new lines in the text.
+   */
   const removeCurrentSpacing = () => {
     const newHeaders = headers.map((header) => {
       const { text } = header;
@@ -160,11 +153,22 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
     setAutoSpaced(!autoSpaced);
   };
 
+  /**
+   * @param {Object} e - Event object.
+   * onChange event for the Table of Contents String textarea.
+   */
   const uploadTocString = (e) => {
     const { value } = e.target;
     setTocText(value);
   };
 
+  /**
+   * If we click "Ok" on the Table of Contents tab.
+   *
+   * Create headers then add them to the end of the current headers.
+   * Clear the Table of Contents String textarea.
+   * Return to the main tab.
+   */
   const addTocHeaders = () => {
     const tocHeaders = getHeadersFromTocText(tocText, headers);
     const newHeaders = headers.concat(tocHeaders);
@@ -173,6 +177,11 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
     setTab("tab-A");
   };
 
+  /**
+   * @param {String} t - The tab we want to switch to.
+   *
+   * We also check if there is a current Table of Contents string.
+   */
   const changeTab = (t) => {
     if (tocText.trim().length > 0) {
       setTocText("");
@@ -180,6 +189,7 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
     setTab(t);
   };
 
+  // Header actions.
   const actions = {
     remove,
     update,
@@ -191,71 +201,37 @@ function Headers({ modals, expandModalExpansion, closeModalExpansion }) {
     display && (
       <section className="tabs">
         <menu role="tablist" aria-label="Sample Tabs">
-          <button
-            role="tab"
-            aria-selected={tab === "tab-A" ? "true" : false}
-            aria-controls="tab-A"
-            onClick={() => changeTab("tab-A")}
-          >
-            Main
-          </button>
-          <button
-            role="tab"
-            aria-selected={tab === "tab-B" ? "true" : false}
-            aria-controls="tab-B"
-            onClick={() => changeTab("tab-B")}
-          >
-            Quick Headers
-          </button>
-          <button
-            role="tab"
-            aria-selected={tab === "tab-C" ? "true" : false}
-            aria-controls="tab-C"
-            onClick={() => changeTab("tab-C")}
-          >
-            Table of Contents
-          </button>
+          <TabButton
+            text="Main"
+            label="tab-Main"
+            onClick={changeTab}
+            tab={tab}
+          />
+          <TabButton
+            text="Spacing"
+            label="tab-B"
+            onClick={changeTab}
+            tab={tab}
+          />
+          <TabButton
+            text="Table of Contents"
+            label="tab-C"
+            onClick={changeTab}
+            tab={tab}
+          />
         </menu>
-        {tab === "tab-A" && (
-          <article role="tabpanel" id="tab-A">
-            <Flex>
-              <div>
-                <TopButtons>
-                  <button onClick={add} disabled={disableAdd}>
-                    Add
-                  </button>
-                  {!autoSpaced && (
-                    <button onClick={spaceCurrentText} disabled={disableAdd}>
-                      Space Current Headers
-                    </button>
-                  )}
-                  {autoSpaced && (
-                    <button
-                      onClick={removeCurrentSpacing}
-                      disabled={disableAdd}
-                    >
-                      Remove Headers Spacing
-                    </button>
-                  )}
-                </TopButtons>
-                <ul>
-                  {headers.map((header) => {
-                    const { idNumber } = header;
-                    return (
-                      <Header
-                        data={header}
-                        key={idNumber}
-                        actions={actions}
-                        headers={headers}
-                        update={update}
-                      />
-                    );
-                  })}
-                </ul>
-              </div>
-              {displayExpansion && <Expansion update={update} />}
-            </Flex>
-          </article>
+        {tab === "tab-Main" && (
+          <MainTab
+            add={add}
+            update={update}
+            headers={headers}
+            actions={actions}
+            disableAdd={disableAdd}
+            autoSpaced={autoSpaced}
+            spaceCurrentText={spaceCurrentText}
+            displayExpansion={displayExpansion}
+            removeCurrentSpacing={removeCurrentSpacing}
+          />
         )}
         {tab === "tab-B" && (
           <article role="tabpanel" id="tab-B">

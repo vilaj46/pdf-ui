@@ -4,6 +4,16 @@ import createBlankHeader from "./createBlankHeader";
 // make sure we also change it in the safer split regex.
 const ellipse = "CODE<<ELLIPSE>>CODE";
 
+/**
+ * @param {String} tocText - Table of Contents String.
+ * @param {Array} headers - Our current headers.
+ * @returns
+ *
+ * Do a couple of removals from the text to get it in sync.
+ * We then do a safe split to get the text and the numbers.
+ *
+ * Check headers, if they are good return them.
+ */
 function getHeadersFromTocText(tocText, headers) {
   let tempText = removeTableOfContents(tocText);
   tempText = removeRomanNumerals(tempText);
@@ -21,6 +31,18 @@ function getHeadersFromTocText(tocText, headers) {
   }
 }
 
+/**
+ * @param {Object} headersAndPageNumbers - text and page numbers.
+ * @param {String} originalText - Our original uploaded string.
+ * @returns boolean - Whether or not our headers are good.
+ *
+ * We squish our original text together to ensure
+ * that our header exists.
+ *
+ * We squish our header and respected page number together
+ * then check if the header/pagenumber are in the squished
+ * text.
+ */
 function check(headersAndPageNumbers, originalText) {
   let isGood = true;
   const { pageNumbers, text } = headersAndPageNumbers;
@@ -48,10 +70,15 @@ function check(headersAndPageNumbers, originalText) {
   return isGood;
 }
 
+/**
+ * @param {String} tocText - Uploaded Table of Contents string.
+ * @returns object with headers and page numbers.
+ *
+ * First we split to find the headers.
+ * Then we split to find the page numbers.
+ */
 function saferSplit(tocText) {
-  // Could not figure out interpolation in the RegExp.
-  // For now hard code the ellipse.
-  const regex = /CODE<<ELLIPSE>>CODE\s+\d+/gi;
+  const regex = new RegExp(`${ellipse}\\s+\\d+`, "gi");
 
   const split = tocText.split(regex);
 
@@ -64,7 +91,7 @@ function saferSplit(tocText) {
     }
   });
 
-  const regex2 = /CODE<<ELLIPSE>>CODE\s+?/gi;
+  const regex2 = new RegExp(`${ellipse}\\s+?`, "gi");
   const split2 = tocText.split(regex2);
 
   let pageNumbers = [];
@@ -80,11 +107,9 @@ function saferSplit(tocText) {
         const whiteSpace = trimmed.indexOf(" ");
         const sliced = trimmed.slice(0, whiteSpace);
         if (Number(sliced)) {
+          // Example: 10 Exhibit A-
           pageNumbers.push(sliced);
         } else {
-          // If we remove too much near a number
-          // it combines the page number and the next header
-          // and doesn't really show in the textarea.
           const pn = findPageNumberInSlice(sliced);
           if (pn !== -1) {
             pageNumbers.push(pn);
@@ -100,7 +125,14 @@ function saferSplit(tocText) {
   };
 }
 
-// Separate the early page number and text.
+/**
+ * @param {String} text
+ * @returns String or Number depending on our results.
+ *
+ * If we remove too much near a number
+ * it combines the page number and the next header
+ * and doesn't really show in the textarea.
+ */
 function findPageNumberInSlice(text) {
   const regex = /\D+/;
   const split = text.split(regex);
@@ -112,6 +144,14 @@ function findPageNumberInSlice(text) {
   return -1;
 }
 
+/**
+ * @param {Object} headersAndPageNumbers - Headers / page numbers.
+ * @param {Array} headers - Current headers.
+ * @returns array of new headers.
+ *
+ * Takes our newly created headers with the page numbers
+ * and adds them to the current headers.
+ */
 function createHeaders(headersAndPageNumbers, headers) {
   const { text, pageNumbers } = headersAndPageNumbers;
   const newHeaders = text.map((header, index) => {
@@ -128,12 +168,22 @@ function createHeaders(headersAndPageNumbers, headers) {
   return newHeaders;
 }
 
+/**
+ * @param {String} tocText - Uploaded Table of Contents
+ * @returns Table of Contents without the ellipses.
+ *
+ * We replace ... with our ellipse string at the top of the file.
+ */
 function syncEllipses(tocText) {
   const regex = /\.{2,}/gi;
   const temp = tocText.replace(regex, ellipse);
   return temp;
 }
 
+/**
+ * @param {String} tocText - Uploaded Table of Contents
+ * @returns Table of Contents without "Table of Contents"
+ */
 function removeTableOfContents(tocText) {
   let tempText = tocText;
 
@@ -144,6 +194,16 @@ function removeTableOfContents(tocText) {
   return tempText;
 }
 
+/**
+ * @param {String} tocText - Uploaded Table of Contents
+ * @returns Table of Contents without roman numerals.
+ *
+ * Iterate through our roman numerals array. Currently
+ * we supposed up to 30 Table of Contents pages.
+ *
+ * We make sure there is a roman numeral on the page
+ * and then we check to see if it is surrounded by blank spaces.
+ */
 function removeRomanNumerals(tocText) {
   let tempText = tocText;
   romans.forEach((roman) => {
@@ -177,16 +237,28 @@ function removeRomanNumerals(tocText) {
   return tempText;
 }
 
+/**
+ * @param {String} tocText - Uploaded Table of Contents
+ * @returns Table of Contents without \n
+ */
 function removeNewLines(text) {
   const regex = /\n+/gi;
   return text.replace(regex, "");
 }
 
+/**
+ * @param {String} tocText - Uploaded Table of Contents
+ * @returns Table of Contents without ...
+ */
 function removeEllipses(text) {
   const regex = /\.{2,}/gi;
   return text.replace(regex, "");
 }
 
+/**
+ * @param {String} tocText - Uploaded Table of Contents
+ * @returns Table of Contents without spaces.
+ */
 function removeSpaces(text) {
   const regex = /\s+/gi;
   return text.replace(regex, "");

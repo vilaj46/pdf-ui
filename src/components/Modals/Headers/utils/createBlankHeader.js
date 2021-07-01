@@ -1,6 +1,13 @@
 /**
- * @param {Array} headers - Current headers state
+ * @param {Array} headers - Current headers.
+ * @param {String} text - Header text.
+ * @param {String} startPage - Header starting page.
+ * @param {String} endPage - Header ending page.
  * @returns new header object.
+ *
+ * We use the headers to determine the index.
+ * If a page range was not given, we use the header to also
+ * assign a page range.
  */
 function createBlankHeader(
   headers,
