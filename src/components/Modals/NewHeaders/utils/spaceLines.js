@@ -1,31 +1,31 @@
 import { MAX_CHARS_PER_HEADER_LINE } from "../../../localData";
 
 /**
- * @param {String} text - Current text of the header.
- * @param {Boolean} removeSpacing - Whether or not we are removing the spacing.
- * @returns text with or without spacing.
- *
- * Split the lines then add new lines.
+ * @param {Object} header - Header object.
+ * @param {Boolean} removeSpace - Whether or not we are adding or removing the spaces.
+ * @returns Object - Same header object with the lines either spaced or unspaced.
  */
-function spaceIndividualText(text, removeSpacing) {
-  if (!removeSpacing) {
-    const lines = createLines(text);
-    let newText = "";
+function spaceLines(header, removeSpace) {
+  const { lines } = header;
+  let text = "";
+  lines.forEach((line) => {
+    text = text + " " + line;
+  });
 
-    lines.forEach((line, index) => {
-      if (index === lines.length - 1) {
-        newText = newText + line.trim();
-      } else {
-        newText = newText + line.trim() + "\n\n";
-      }
-    });
-    return newText;
+  if (removeSpace) {
+    const newHeader = {
+      ...header,
+      lines: [text.trim()],
+    };
+    return newHeader;
   } else {
-    // Remove spacing.
-    const regex = /\n/gi;
-    const noNewLines = text.replace(regex, " ");
-    const regex2 = /\s{2,}/gi;
-    return noNewLines.replace(regex2, " ");
+    const newLines = createLines(text);
+    const newHeader = {
+      ...header,
+      lines: newLines,
+    };
+
+    return newHeader;
   }
 }
 
@@ -44,7 +44,7 @@ function createLines(text) {
   const numberOfLines = Math.ceil(text.length / MAX_CHARS_PER_HEADER_LINE);
   for (let i = 0; i < numberOfLines; i++) {
     if (tempText.length <= MAX_CHARS_PER_HEADER_LINE) {
-      lines.push(tempText);
+      lines.push(tempText.trim());
     } else {
       // Slice until max lines.
       let slicedObj = customSlice(tempText, maxChars);
@@ -52,7 +52,7 @@ function createLines(text) {
       // Don't end on "dated"
       slicedObj = dontEndOn(slicedObj, "dated");
 
-      lines.push(slicedObj.text);
+      lines.push(slicedObj.text.trim());
       maxChars = slicedObj.maxChars;
       tempText = tempText.slice(maxChars, tempText.length);
     }
@@ -105,4 +105,4 @@ function customSlice(text, maxChars) {
   };
 }
 
-export default spaceIndividualText;
+export default spaceLines;

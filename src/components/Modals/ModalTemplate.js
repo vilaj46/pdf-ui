@@ -7,8 +7,9 @@ import actions from "../../actions";
 const ModalContainer = styled.div`
   display: flex;
   padding-top: 10px;
-  max-width: 70%;
+  max-width: 60%;
   z-index: 10;
+  margin: 0 auto;
 `;
 
 function ModalTemplate({
@@ -19,21 +20,27 @@ function ModalTemplate({
   Expansion = () => {},
 }) {
   // Props
-  const { openModal, expansion } = modals;
+  // const { openModal, expansion } = modals;
+  const { openModal } = modals;
 
   // Misc
-  let displayExpansion = false;
+  // let displayExpansion = false;
 
-  try {
-    displayExpansion = Object.keys(expansion).length > 0 ? true : false;
-  } catch {
-    // Above code fails if there is no expansionProps.
-    // Therefore, no Expansion either. displayExpansion will remain false.
-  }
+  // try {
+  //   displayExpansion = Object.keys(expansion).length > 0 ? true : false;
+  // } catch {
+  //   // Above code fails if there is no expansionProps.
+  //   // Therefore, no Expansion either. displayExpansion will remain false.
+  // }
 
   return (
     <ModalContainer>
-      <div style={{ width: `${displayExpansion ? "60%" : "100%"}` }}>
+      <div
+        // style={{
+        //   width: `${displayExpansion ? "60%" : "100%"}`,
+        // }}
+        style={{ width: "100%" }}
+      >
         <div className="window">
           <div className="title-bar">
             <div className="title-bar-text">{openModal}</div>

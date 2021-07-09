@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 
 const TableOfContentsTextArea = styled.textarea`
@@ -7,19 +8,19 @@ const TableOfContentsTextArea = styled.textarea`
   border: 1px solid lightgray;
 `;
 
-function TOCTab(props) {
-  const { tocText, uploadTocString, addTocHeaders } = props;
+function TocTab(props) {
+  const { tocText, changeTocString, addTocHeaders } = props;
   return (
-    <article role="tabpanel" id="tab-TOC">
+    <React.Fragment>
       <label htmlFor="tocString">Table of Contents String:</label>
       <TableOfContentsTextArea
         htmlFor="tocString"
         value={tocText}
-        onChange={(e) => uploadTocString(e)}
+        onChange={(e) => changeTocString(e)}
       />
       <button onClick={addTocHeaders}>Ok</button>
-    </article>
+    </React.Fragment>
   );
 }
 
-export default TOCTab;
+export default TocTab;

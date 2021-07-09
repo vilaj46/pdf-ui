@@ -15,10 +15,10 @@ Component variables should be:
 1.  Constants
 2.  Local Properties
 3.  Redux Store Properties
-4.  State
-5.  Organized State for Sub Component
-6.  Misc
-7.  Organized State for sub components.
+4.  Misc that effects properties or State
+5.  State
+6.  Organized State for Sub Component
+7.  Misc
 
 ## Interface design
 

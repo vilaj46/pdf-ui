@@ -164,7 +164,6 @@ function createHeaders(headersAndPageNumbers, headers) {
     );
     return newHeader;
   });
-
   return newHeaders;
 }
 

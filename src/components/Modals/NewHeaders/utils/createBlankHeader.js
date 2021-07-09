@@ -19,12 +19,13 @@ function createBlankHeader(
     startPage !== "-1" ? startPage : String(headers.length + 1);
   const endPageValue = endPage !== "-1" ? endPage : String(headers.length + 1);
   return {
-    text,
+    // text,
     startPage: startPageValue,
     endPage: endPageValue,
     index: headers.length,
     idNumber: Math.ceil(Math.random() * 1000000),
     updatedFromExpansion: false,
+    lines: [text],
   };
 }
 

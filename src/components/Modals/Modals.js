@@ -5,7 +5,8 @@ import { connect } from "react-redux";
 import ModalTemplate from "./ModalTemplate";
 
 // Sub Modals
-import Headers from "./Headers/Headers";
+// import Headers from "./Headers/Headers";
+import NewHeaders from "./NewHeaders/NewHeaders";
 // PageNumbers goes here.
 
 function Modals(props) {
@@ -19,7 +20,8 @@ function Modals(props) {
   return (
     displayModal && (
       /** Header Modal w/ Expansion*/
-      <ModalTemplate Body={Headers} />
+      // <ModalTemplate Body={Headers} />
+      <ModalTemplate Body={NewHeaders} />
     )
   );
 }
