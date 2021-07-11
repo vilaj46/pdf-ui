@@ -1,7 +1,9 @@
 import React from "react";
 
 function HeadersMenu(props) {
+  // Properties
   const { setTab, tab } = props;
+
   return (
     <menu role="tablist" aria-label="Sample Tabs">
       <button

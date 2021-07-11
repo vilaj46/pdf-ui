@@ -258,6 +258,7 @@ function NewHeaders() {
       lines.forEach((line) => {
         text = text + line;
       });
+
       if (text.trim().length === 0) {
         return false;
       } else {
@@ -267,11 +268,17 @@ function NewHeaders() {
     setHeaders(newHeaders);
   };
 
+  const applyHeaders = () => {
+    // API call
+    console.log("Apply headers");
+  };
+
   return (
     <Container>
       <PositiveButtons
         inserting={inserting}
         addHeader={addHeader}
+        applyHeaders={applyHeaders}
         spaceHeaders={spaceHeaders}
         toggleInserting={toggleInserting}
         insertHeadersIntoPositions={insertHeadersIntoPositions}

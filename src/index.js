@@ -12,7 +12,7 @@ import App from "./components/App";
 // Reducers
 import rootReducer from "./rootReducer";
 
-// Clean up QuickSpacing file.
+// Are we using expansion stuff in the redux state?
 
 const store = createStore(
   rootReducer,

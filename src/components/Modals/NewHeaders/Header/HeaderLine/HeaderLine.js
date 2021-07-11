@@ -13,17 +13,28 @@ const InputContainer = styled.div`
   position: relative;
 `;
 
+const Xbutton = styled.button`
+  position: absolute;
+  right: -110px;
+`;
+
 function HeaderLine(props) {
+  // Properties
   const { line, index, updateLines, addLine, removeLine } = props;
+
+  // State
   const [focused, setFocused] = React.useState(false);
 
+  // Misc
   const randID = Math.floor(Math.random() * 1000000);
 
+  // Update header lines on line change.
   const onChange = (e, index) => {
     const { value } = e.target;
     updateLines(index, value);
   };
 
+  // Track when the user hits 'enter' and add the appropriate line.
   const onKeyDown = (e) => {
     const { keyCode } = e;
     const { selectionStart } = e.target;
@@ -33,15 +44,23 @@ function HeaderLine(props) {
     }
   };
 
+  // Automatically focus on the text input
+  // if we hover over it.
   const mouseEnter = () => {
     const input = document.getElementById(randID);
     input.focus();
   };
 
+  // Toggle focus to true.
+  // Will show the 'x' button.
   const onFocus = () => {
     setFocused(true);
   };
 
+  // Toggle focus to false.
+  // If we blur stop showing the 'x' button.
+  // If we click the 'x' button blur and
+  // remove the line
   const onBlur = (e) => {
     setFocused(false);
     try {
@@ -69,16 +88,9 @@ function HeaderLine(props) {
         id={randID}
       />
       {focused && (
-        <button
-          type="text"
-          title="Remove Line"
-          style={{
-            position: "absolute",
-            right: "-100px",
-          }}
-        >
+        <Xbutton type="text" title="Remove Line">
           X
-        </button>
+        </Xbutton>
       )}
     </InputContainer>
   );

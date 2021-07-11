@@ -13,14 +13,13 @@ const ModalContainer = styled.div`
 `;
 
 function ModalTemplate({
-  bodyProps = {},
+  // bodyProps = {},
   modals,
   closeModal,
   Body = () => {},
-  Expansion = () => {},
+  // Expansion = () => {},
 }) {
   // Props
-  // const { openModal, expansion } = modals;
   const { openModal } = modals;
 
   // Misc
@@ -51,7 +50,8 @@ function ModalTemplate({
             </div>
           </div>
           <div className="window-body">
-            <Body {...bodyProps} />
+            {/* <Body {...bodyProps} /> */}
+            <Body />
           </div>
         </div>
       </div>

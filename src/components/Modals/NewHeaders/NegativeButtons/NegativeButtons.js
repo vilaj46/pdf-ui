@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const Container = styled.div`
   position: fixed;
-  top: 220px;
+  top: 260px;
   left: 10px;
   color: #ffffff;
 
@@ -22,6 +22,7 @@ const CheckAndX = styled.div`
 `;
 
 function NegativeButtons(props) {
+  // Properties
   const {
     removing,
     removeSpace,
@@ -29,6 +30,7 @@ function NegativeButtons(props) {
     removeBlankHeaders,
     removeMarkedForDeletion,
   } = props;
+
   return (
     <Container>
       <div className="window">
@@ -45,7 +47,7 @@ function NegativeButtons(props) {
             Remove Space
           </button>
           <button type="text" onClick={removeBlankHeaders}>
-            Remove Blanks
+            Remove Blank Headers
           </button>
         </FlexColumn>
       </div>
@@ -54,6 +56,7 @@ function NegativeButtons(props) {
 }
 
 function RemoveButtons(props) {
+  // Properties.
   const { toggleRemoving, removing, removeMarkedForDeletion } = props;
 
   if (!removing) {

@@ -7,7 +7,7 @@ import ModalTemplate from "./ModalTemplate";
 // Sub Modals
 // import Headers from "./Headers/Headers";
 import NewHeaders from "./NewHeaders/NewHeaders";
-// PageNumbers goes here.
+import PageNumbers from "./PageNumbers/PageNumbers";
 
 function Modals(props) {
   // Props
@@ -17,13 +17,23 @@ function Modals(props) {
   const { openModal } = modals;
   const displayModal = openModal.length > 0 ? true : false;
 
-  return (
-    displayModal && (
-      /** Header Modal w/ Expansion*/
-      // <ModalTemplate Body={Headers} />
-      <ModalTemplate Body={NewHeaders} />
-    )
-  );
+  if (openModal === "Headers") {
+    return (
+      displayModal && (
+        /** Header Modal w/ Expansion*/
+        // <ModalTemplate Body={Headers} />
+        <ModalTemplate Body={NewHeaders} />
+      )
+    );
+  } else {
+    return (
+      displayModal && (
+        /** Header Modal w/ Expansion*/
+        // <ModalTemplate Body={Headers} />
+        <ModalTemplate Body={PageNumbers} />
+      )
+    );
+  }
 }
 
 // Include helper function to setup templates based on the modal opened.

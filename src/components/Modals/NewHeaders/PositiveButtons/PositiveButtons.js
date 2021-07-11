@@ -22,13 +22,16 @@ const CheckAndX = styled.div`
 `;
 
 function PositiveButtons(props) {
+  // Properties
   const {
     addHeader,
     inserting,
     spaceHeaders,
+    applyHeaders,
     toggleInserting,
     insertHeadersIntoPositions,
   } = props;
+
   return (
     <Container>
       <div className="window">
@@ -47,6 +50,10 @@ function PositiveButtons(props) {
           <button type="text" onClick={spaceHeaders}>
             Space Headers
           </button>
+          <hr />
+          <button type="text" onClick={applyHeaders}>
+            Apply Headers
+          </button>
         </FlexColumn>
       </div>
     </Container>
@@ -54,6 +61,7 @@ function PositiveButtons(props) {
 }
 
 function InsertButtons(props) {
+  // Properties.
   const { toggleInserting, inserting, insertHeadersIntoPositions } = props;
   if (!inserting) {
     return (

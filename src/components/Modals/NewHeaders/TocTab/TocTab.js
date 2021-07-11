@@ -9,7 +9,9 @@ const TableOfContentsTextArea = styled.textarea`
 `;
 
 function TocTab(props) {
+  // Properties.
   const { tocText, changeTocString, addTocHeaders } = props;
+
   return (
     <React.Fragment>
       <label htmlFor="tocString">Table of Contents String:</label>
