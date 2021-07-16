@@ -14,6 +14,9 @@ import HeadersMenu from "./HeadersMenu/HeadersMenu";
 import PositiveButtons from "./PositiveButtons/PositiveButtons";
 import NegativeButtons from "./NegativeButtons/NegativeButtons";
 
+// API
+import sendHeadersToBackend from "../../../api/sendHeadersToBackend";
+
 const Container = styled.section`
   position: relative;
 `;
@@ -268,9 +271,9 @@ function NewHeaders() {
     setHeaders(newHeaders);
   };
 
-  const applyHeaders = () => {
+  const applyHeaders = async () => {
     // API call
-    console.log("Apply headers");
+    await sendHeadersToBackend(headers);
   };
 
   return (

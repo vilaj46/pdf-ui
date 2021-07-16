@@ -1,5 +1,4 @@
 import fileUtils from "./utils/fileUtils";
-// import documentUtils from "./utils/documentUtils";
 
 const fileObject = {
   title: "File", // Dropdown Text.
@@ -12,7 +11,7 @@ const fileObject = {
     },
     {
       label: "Close",
-      onClick: (state) => fileUtils.closeFile(state),
+      onClick: (state) => fileUtils.closeOpenedFile(state),
     },
   ],
   state: {},

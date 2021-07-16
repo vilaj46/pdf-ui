@@ -5,41 +5,21 @@ import styled from "styled-components";
 import actions from "../../actions";
 
 const ModalContainer = styled.div`
-  display: flex;
-  padding-top: 10px;
-  max-width: 60%;
+  width: 60vw;
   z-index: 10;
+  position: absolute;
+  left: 0;
+  right: 0;
   margin: 0 auto;
 `;
 
-function ModalTemplate({
-  // bodyProps = {},
-  modals,
-  closeModal,
-  Body = () => {},
-  // Expansion = () => {},
-}) {
+function ModalTemplate({ modals, closeModal, Body = () => {} }) {
   // Props
   const { openModal } = modals;
 
-  // Misc
-  // let displayExpansion = false;
-
-  // try {
-  //   displayExpansion = Object.keys(expansion).length > 0 ? true : false;
-  // } catch {
-  //   // Above code fails if there is no expansionProps.
-  //   // Therefore, no Expansion either. displayExpansion will remain false.
-  // }
-
   return (
     <ModalContainer>
-      <div
-        // style={{
-        //   width: `${displayExpansion ? "60%" : "100%"}`,
-        // }}
-        style={{ width: "100%" }}
-      >
+      <div style={{ width: "100%" }}>
         <div className="window">
           <div className="title-bar">
             <div className="title-bar-text">{openModal}</div>
@@ -50,12 +30,10 @@ function ModalTemplate({
             </div>
           </div>
           <div className="window-body">
-            {/* <Body {...bodyProps} /> */}
             <Body />
           </div>
         </div>
       </div>
-      {/* {displayExpansion && <Expansion />} */}
     </ModalContainer>
   );
 }

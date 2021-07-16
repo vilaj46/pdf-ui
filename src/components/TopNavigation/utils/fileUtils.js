@@ -1,5 +1,5 @@
 /**
- * @param {Object} state - file, uploadFile, closeFile. State from the redux store and actions.
+ * @param {Object} state - file, uploadFile, closeOpenedFile. State from the redux store and actions.
  *
  * Temporarily open a file selection. If we choose a file,
  * upload it!
@@ -18,6 +18,7 @@ function openFile(state) {
       uploadFile({
         ...fileObject,
         blob,
+        file,
       });
     }
   });
@@ -44,16 +45,16 @@ function createFileObject(file) {
  *
  * If we have a file uploaded, set the file back to {}.
  */
-function closeFile(state) {
-  const { uploadFile, file } = state;
+function closeOpenedFile(state) {
+  const { closeFile, file } = state;
   if (Object.keys(file).length > 0) {
-    uploadFile({});
+    closeFile();
   }
 }
 
 const fileUtils = {
   openFile,
-  closeFile,
+  closeOpenedFile,
 };
 
 export default fileUtils;

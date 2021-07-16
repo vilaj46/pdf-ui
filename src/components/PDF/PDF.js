@@ -31,7 +31,7 @@ function PDF({ file, topNavigation }) {
           zIndex,
           overflow: "hidden",
           height: "75%",
-          width: "50%",
+          width: "60%",
           position: "absolute",
           right: "10px",
           marginLeft: "auto",

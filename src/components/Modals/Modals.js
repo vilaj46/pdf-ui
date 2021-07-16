@@ -21,7 +21,6 @@ function Modals(props) {
     return (
       displayModal && (
         /** Header Modal w/ Expansion*/
-        // <ModalTemplate Body={Headers} />
         <ModalTemplate Body={NewHeaders} />
       )
     );
@@ -29,7 +28,6 @@ function Modals(props) {
     return (
       displayModal && (
         /** Header Modal w/ Expansion*/
-        // <ModalTemplate Body={Headers} />
         <ModalTemplate Body={PageNumbers} />
       )
     );

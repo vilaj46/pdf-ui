@@ -44,7 +44,7 @@ function NegativeButtons(props) {
             removeMarkedForDeletion={removeMarkedForDeletion}
           />
           <button type="text" onClick={removeSpace}>
-            Remove Space
+            Remove Auto Space
           </button>
           <button type="text" onClick={removeBlankHeaders}>
             Remove Blank Headers

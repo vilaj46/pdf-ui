@@ -12,7 +12,7 @@ function HeadersMenu(props) {
         aria-controls="tab-Main"
         onClick={() => setTab("tab-Main")}
       >
-        Main
+        Heads
       </button>
       <button
         role="tab"
