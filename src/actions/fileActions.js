@@ -25,12 +25,20 @@ function closeFile() {
       });
     });
   };
-  // return (dispatch) =>
+}
+
+function changeBlob(blob) {
+  return (dispatch) =>
+    dispatch({
+      payload: blob,
+      type: fileTypes.CHANGED_BLOB,
+    });
 }
 
 const actions = {
   uploadFile,
   closeFile,
+  changeBlob,
 };
 
 export default actions;

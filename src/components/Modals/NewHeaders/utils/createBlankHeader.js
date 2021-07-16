@@ -24,7 +24,7 @@ function createBlankHeader(
     endPage: endPageValue,
     index: headers.length,
     idNumber: Math.ceil(Math.random() * 1000000),
-    updatedFromExpansion: false,
+    // updatedFromExpansion: false,
     lines: [text],
   };
 }

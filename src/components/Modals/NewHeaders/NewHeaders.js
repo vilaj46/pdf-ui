@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import styled from "styled-components";
 
 // Utils
@@ -17,11 +18,17 @@ import NegativeButtons from "./NegativeButtons/NegativeButtons";
 // API
 import sendHeadersToBackend from "../../../api/sendHeadersToBackend";
 
+// Actions
+import actions from "../../../actions/fileActions";
+
 const Container = styled.section`
   position: relative;
 `;
 
-function NewHeaders() {
+function NewHeaders(props) {
+  // Redux Action
+  const { changeBlob } = props;
+
   // State
   const [headers, setHeaders] = React.useState([]);
   const [tab, setTab] = React.useState("tab-Main");
@@ -273,7 +280,9 @@ function NewHeaders() {
 
   const applyHeaders = async () => {
     // API call
-    await sendHeadersToBackend(headers);
+    const newBlob = await sendHeadersToBackend(headers);
+    const blob = URL.createObjectURL(newBlob);
+    changeBlob(blob);
   };
 
   return (
@@ -332,4 +341,6 @@ function NewHeaders() {
   );
 }
 
-export default NewHeaders;
+const { changeBlob } = actions;
+
+export default connect(null, { changeBlob })(NewHeaders);

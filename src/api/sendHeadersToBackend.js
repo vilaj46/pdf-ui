@@ -13,33 +13,25 @@ async function sendHeadersToBackend(headers) {
   });
 
   const formData = new FormData();
-  const stringed = filtered.map((header) => {
-    const stringedHeader = JSON.stringify(header);
-    return stringedHeader;
+  const dictionary = {};
+  filtered.forEach((header, index) => {
+    dictionary[`${index}`] = header;
   });
 
-  formData.append("headers", stringed);
+  formData.append("headers", JSON.stringify(dictionary));
 
-  axios
-    .post("headers/apply", formData, {
+  try {
+    const res = await axios.post("headers/apply", formData, {
       responseType: "blob",
-    })
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err);
     });
-
-  //   try {
-  //     const res = await axios(config);
-  //     if (res.status === 200) {
-  //       const { data } = res;
-  //       return data;
-  //     }
-  //   } catch (err) {
-  //     return;
-  //   }
+    if (res.status === 200) {
+      const { data } = res;
+      console.log(data);
+      return data;
+    }
+  } catch (err) {
+    return;
+  }
 }
 
 /**

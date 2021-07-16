@@ -1,9 +1,11 @@
 // File types
 const CLOSED_FILE = "CLOSED_FILE";
+const CHANGED_BLOB = "CHANGED_BLOB";
 const UPLOADED_FILE = "UPLOADED_FILE";
 
 export const fileTypes = {
   CLOSED_FILE,
+  CHANGED_BLOB,
   UPLOADED_FILE,
 };
 
