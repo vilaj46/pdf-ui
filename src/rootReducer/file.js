@@ -13,6 +13,16 @@ function fileReducer(state = initialState, action) {
         ...state,
         blob: action.payload,
       };
+    case fileTypes.ENABLED_APP:
+      return {
+        ...state,
+        loading: false,
+      };
+    case fileTypes.DISABLED_APP:
+      return {
+        ...state,
+        loading: true,
+      };
     default:
       return state;
   }

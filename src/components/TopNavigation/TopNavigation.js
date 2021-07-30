@@ -14,8 +14,11 @@ import actions from "../../actions";
 import addStateToLocalData from "./utils/addStateToLocalData";
 
 function TopNavigation(props) {
+  // Redux Actions
+  const { uploadFile, closeFile, expandModal } = props;
+
   // Redux Store Properties
-  const { file, uploadFile, closeFile, expandModal } = props;
+  const { file } = props;
 
   // Organized State for Sub Component
   const fileState = {
@@ -28,6 +31,7 @@ function TopNavigation(props) {
     expandModal,
   };
 
+  // Misc
   // Local Data
   let { fileObject, documentObject } = localData;
 

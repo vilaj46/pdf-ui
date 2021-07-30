@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const Container = styled.div`
   position: fixed;
-  top: 260px;
+  top: 300px;
   left: 10px;
   color: #ffffff;
 
@@ -26,7 +26,10 @@ function NegativeButtons(props) {
   const {
     removing,
     removeSpace,
+    clearHeaders,
     toggleRemoving,
+    removeBlankLines,
+    removePageRanges,
     removeBlankHeaders,
     removeMarkedForDeletion,
   } = props;
@@ -48,6 +51,16 @@ function NegativeButtons(props) {
           </button>
           <button type="text" onClick={removeBlankHeaders}>
             Remove Blank Headers
+          </button>
+          <button type="text" onClick={removePageRanges}>
+            Remove Page Ranges
+          </button>
+          <button type="text" onClick={removeBlankLines}>
+            Remove Blank Lines
+          </button>
+          <hr />
+          <button type="text" onClick={clearHeaders}>
+            Clear Headers
           </button>
         </FlexColumn>
       </div>

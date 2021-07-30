@@ -10,9 +10,9 @@ import { connect } from "react-redux";
  * us to close the menu.
  */
 function PDF({ file, topNavigation }) {
-  // Props
-  const { openDropdown } = topNavigation; // From redux store.
-  const { name = "", blob } = file; // From redux store.
+  // Redux Store Properties
+  const { openDropdown } = topNavigation;
+  const { name = "", blob } = file;
 
   // Misc
   // Assists in making clickable when we have a Dropdown open in the TopNavigation.
@@ -30,12 +30,11 @@ function PDF({ file, topNavigation }) {
         style={{
           zIndex,
           overflow: "hidden",
-          height: "75%",
+          height: "98vh",
           width: "60%",
           position: "absolute",
-          right: "10px",
-          marginLeft: "auto",
-          marginRight: "auto",
+          left: "50%",
+          transform: "translateX(-50%)",
         }}
       ></iframe>
     )

@@ -16,7 +16,12 @@ async function fileUpload(file) {
     const res = await axios(config);
     if (res.status === 200) {
       const { data } = res;
-      return data;
+      const { headers } = res;
+      const pageCount = headers["x-pagecount"];
+      return {
+        ...data,
+        pageCount,
+      };
     }
   } catch (err) {
     return;

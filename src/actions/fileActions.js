@@ -8,7 +8,7 @@ function uploadFile(payload) {
     return fileUpload(payload.file).then((res) => {
       if (res !== undefined) {
         dispatch({
-          payload,
+          payload: { ...payload, ...res, loading: false },
           type: fileTypes.UPLOADED_FILE,
         });
       }
@@ -35,10 +35,26 @@ function changeBlob(blob) {
     });
 }
 
+function disableApp() {
+  return (dispatch) =>
+    dispatch({
+      type: fileTypes.DISABLED_APP,
+    });
+}
+
+function enableApp() {
+  return (dispatch) =>
+    dispatch({
+      type: fileTypes.ENABLED_APP,
+    });
+}
+
 const actions = {
-  uploadFile,
   closeFile,
+  disableApp,
+  enableApp,
   changeBlob,
+  uploadFile,
 };
 
 export default actions;

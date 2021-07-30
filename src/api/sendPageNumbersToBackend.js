@@ -1,27 +1,28 @@
 import axios from "axios";
 
-async function sendHeadersToBackend(headers) {
-  const filtered = headers.filter((header) => {
-    const { startPage, endPage } = header;
+async function sendPageNumbersToBackend(state) {
+  const { startPage, endPage, text, option } = state;
+
+  if (option === "range") {
     const rangeIsOk = checkPageRange(startPage, endPage);
 
-    if (rangeIsOk) {
-      return true;
-    } else {
+    if (!rangeIsOk) {
       return false;
     }
-  });
+  }
+
+  const dictionary = {
+    startPage,
+    endPage,
+    text,
+    range: option,
+  };
 
   const formData = new FormData();
-  const dictionary = {};
-  filtered.forEach((header, index) => {
-    dictionary[`${index}`] = header;
-  });
-
-  formData.append("headers", JSON.stringify(dictionary));
+  formData.append("pageNumbers", JSON.stringify(dictionary));
 
   try {
-    const res = await axios.post("headers/apply", formData, {
+    const res = await axios.post("pageNumbers/apply", formData, {
       responseType: "blob",
     });
     if (res.status === 200) {
@@ -31,6 +32,7 @@ async function sendHeadersToBackend(headers) {
   } catch (err) {
     return;
   }
+  return {};
 }
 
 /**
@@ -56,4 +58,4 @@ function checkPageRange(startPage, endPage) {
   }
 }
 
-export default sendHeadersToBackend;
+export default sendPageNumbersToBackend;

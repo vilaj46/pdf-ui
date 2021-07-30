@@ -13,12 +13,13 @@ Component imports should be:
 Component variables should be:
 
 1.  Constants
-2.  Local Properties
+2.  Redux Actions
 3.  Redux Store Properties
-4.  Misc that effects properties or State
-5.  State
-6.  Organized State for Sub Component
-7.  Misc
+4.  Local Properties
+5.  Misc that effects properties or State
+6.  State
+7.  Organized State for Sub Component
+8.  Misc
 
 ## Interface design
 

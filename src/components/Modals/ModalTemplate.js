@@ -5,21 +5,32 @@ import styled from "styled-components";
 import actions from "../../actions";
 
 const ModalContainer = styled.div`
-  width: 60vw;
-  z-index: 10;
-  position: absolute;
   left: 0;
   right: 0;
+  width: 60vw;
+  z-index: 10;
   margin: 0 auto;
+  position: absolute;
 `;
 
-function ModalTemplate({ modals, closeModal, Body = () => {} }) {
-  // Props
+const HundoPercent = styled.div`
+  width: 100%;
+`;
+
+function ModalTemplate(props) {
+  // Redux Actions
+  const { closeModal } = props;
+
+  // Redux Store Properties
+  const { modals } = props;
   const { openModal } = modals;
+
+  // Local Properties
+  const { Body } = props;
 
   return (
     <ModalContainer>
-      <div style={{ width: "100%" }}>
+      <HundoPercent>
         <div className="window">
           <div className="title-bar">
             <div className="title-bar-text">{openModal}</div>
@@ -33,7 +44,7 @@ function ModalTemplate({ modals, closeModal, Body = () => {} }) {
             <Body />
           </div>
         </div>
-      </div>
+      </HundoPercent>
     </ModalContainer>
   );
 }

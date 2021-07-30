@@ -28,6 +28,7 @@ function PositiveButtons(props) {
     inserting,
     spaceHeaders,
     applyHeaders,
+    addPageRanges,
     toggleInserting,
     insertHeadersIntoPositions,
   } = props;
@@ -49,6 +50,9 @@ function PositiveButtons(props) {
           />
           <button type="text" onClick={spaceHeaders}>
             Space Headers
+          </button>
+          <button type="text" onClick={addPageRanges}>
+            Add Page Ranges
           </button>
           <hr />
           <button type="text" onClick={applyHeaders}>

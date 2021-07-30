@@ -19,15 +19,19 @@ import NegativeButtons from "./NegativeButtons/NegativeButtons";
 import sendHeadersToBackend from "../../../api/sendHeadersToBackend";
 
 // Actions
-import actions from "../../../actions/fileActions";
+import fileActions from "../../../actions/fileActions";
+import modalsActions from "../../../actions/modalsActions";
 
 const Container = styled.section`
   position: relative;
 `;
 
 function NewHeaders(props) {
-  // Redux Action
-  const { changeBlob } = props;
+  // Redux Actions
+  const { changeBlob, closeModal, disableApp, enableApp } = props;
+
+  // Redux State
+  const { pageCount } = props;
 
   // State
   const [headers, setHeaders] = React.useState([]);
@@ -279,10 +283,114 @@ function NewHeaders(props) {
   };
 
   const applyHeaders = async () => {
-    // API call
+    disableApp();
     const newBlob = await sendHeadersToBackend(headers);
     const blob = URL.createObjectURL(newBlob);
     changeBlob(blob);
+    closeModal();
+    enableApp();
+  };
+
+  const addPageRanges = () => {
+    const newHeaders = headers.map((header, index) => {
+      const { lines, startPage } = header;
+      const endPage = calculateEndPage(index);
+      let newLines = [...lines];
+      if (endPage - startPage > 0) {
+        const pageRange = `[pages ${startPage}-${endPage}]`;
+        if (lines.length === 1) {
+          newLines.push(pageRange);
+        } else {
+          const lastLineIndex = findLastLineWithText(lines);
+          const lineBeforeLast =
+            lines[lastLineIndex - 1].trim() + " " + pageRange;
+          const lineBeforeBefore = lines[lastLineIndex - 2].trim();
+          if (lineBeforeBefore.length >= lineBeforeLast.length) {
+            newLines[lastLineIndex - 1] = lineBeforeLast;
+          } else {
+            newLines.splice(lastLineIndex, 0, pageRange);
+          }
+        }
+      }
+      const newHeader = {
+        ...header,
+        lines: newLines,
+      };
+      return newHeader;
+    });
+    setHeaders(newHeaders);
+  };
+
+  const findLastLineWithText = (lines) => {
+    let index = -1;
+
+    lines.forEach((line, i) => {
+      const trimmed = line.trim();
+
+      if (trimmed.length > 0) {
+        index = i + 1;
+      }
+    });
+
+    return index;
+  };
+
+  const calculateEndPage = (index) => {
+    try {
+      const nextHeader = headers[index + 1];
+      const { endPage } = nextHeader;
+      return Number(endPage) - 1;
+    } catch {
+      return Number(pageCount);
+    }
+  };
+
+  const clearHeaders = () => {
+    setHeaders([]);
+  };
+
+  const removePageRanges = () => {
+    const newHeaders = headers.map((header) => {
+      const regex = /\[pages\s+\d+\s+to\s+\d+\]/gi;
+      const { lines } = header;
+      let newLines = [];
+      lines.forEach((line) => {
+        const searched = line.search(regex);
+        if (searched !== -1) {
+          const newLine = line.replace(regex, "");
+          if (newLine.trim().length > 0) {
+            newLines.push(newLine);
+          }
+        } else {
+          newLines.push(line);
+        }
+      });
+
+      return {
+        ...header,
+        lines: newLines,
+      };
+    });
+    setHeaders(newHeaders);
+  };
+
+  const removeBlankLines = () => {
+    const newHeaders = headers.map((header) => {
+      const { lines } = header;
+      let newLines = [];
+      lines.forEach((line) => {
+        const trimmed = line.trim();
+        if (line.length > 0) {
+          newLines.push(trimmed);
+        }
+      });
+      return {
+        ...header,
+        lines: newLines,
+      };
+    });
+
+    setHeaders(newHeaders);
   };
 
   return (
@@ -292,13 +400,17 @@ function NewHeaders(props) {
         addHeader={addHeader}
         applyHeaders={applyHeaders}
         spaceHeaders={spaceHeaders}
+        addPageRanges={addPageRanges}
         toggleInserting={toggleInserting}
         insertHeadersIntoPositions={insertHeadersIntoPositions}
       />
       <NegativeButtons
         removing={removing}
         removeSpace={removeSpace}
+        clearHeaders={clearHeaders}
         toggleRemoving={toggleRemoving}
+        removePageRanges={removePageRanges}
+        removeBlankLines={removeBlankLines}
         removeBlankHeaders={removeBlankHeaders}
         removeMarkedForDeletion={removeMarkedForDeletion}
       />
@@ -341,6 +453,19 @@ function NewHeaders(props) {
   );
 }
 
-const { changeBlob } = actions;
+const { changeBlob, enableApp, disableApp } = fileActions;
+const { closeModal } = modalsActions;
 
-export default connect(null, { changeBlob })(NewHeaders);
+const mapStateToProps = (state) => {
+  const { file } = state;
+  return {
+    ...file,
+  };
+};
+
+export default connect(mapStateToProps, {
+  changeBlob,
+  closeModal,
+  enableApp,
+  disableApp,
+})(NewHeaders);

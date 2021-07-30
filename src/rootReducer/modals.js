@@ -2,8 +2,8 @@ import { modalTypes } from "../actions/types";
 
 const initialState = {
   openModal: "",
-  expansion: "",
-  expansionData: {},
+  // expansion: "",
+  // expansionData: {},
 };
 
 function modalsReducer(state = initialState, action) {

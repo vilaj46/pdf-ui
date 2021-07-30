@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 // Local Data
 import { TIME_TO_CLOSE_DROPDOWN } from "../../localData";
 
-// Actions 
+// Actions
 import actions from "../../../actions";
 
 /**
@@ -16,12 +16,14 @@ import actions from "../../../actions";
  */
 
 function Dropdown(props) {
-  // Props 
+  // Redux Actions
+  const { expandDropdown, closeDropdown } = props;
+
+  // Props
   // location is where the dropdown is so we can close others in the same area.
   // This will be useful if we use this component in other places.
   const { data } = props; // From the TopNavigation component.
   const { title, items, location } = data;
-  const { expandDropdown, closeDropdown } = props; // From the redux store.
 
   // Misc
   // TopNavigation elements which we click to open the respected Dropdown.
@@ -65,7 +67,7 @@ function Dropdown(props) {
               const buttonClick = (e) => {
                 e.stopPropagation();
                 onClick(state);
-                closeDropdown()
+                closeDropdown();
                 utils.closeAllDropdowns(details, TIME_TO_CLOSE_DROPDOWN);
               };
               return (
@@ -88,7 +90,9 @@ const mapStateToProps = (state) => {
   const { topNavigation } = state;
   return {
     topNavigation,
-  }
-}
+  };
+};
 
-export default connect(mapStateToProps, { expandDropdown, closeDropdown })(Dropdown);
+export default connect(mapStateToProps, { expandDropdown, closeDropdown })(
+  Dropdown
+);

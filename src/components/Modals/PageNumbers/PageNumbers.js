@@ -3,7 +3,11 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 
 // Actions
-import actions from "../../../actions/modalsActions";
+import fileActions from "../../../actions/fileActions";
+import modalsActions from "../../../actions/modalsActions";
+
+// API
+import sendPageNumbersToBackend from "../../../api/sendPageNumbersToBackend";
 
 const InputContainer = styled.div`
   display: flex;
@@ -55,12 +59,13 @@ const Range = styled.div`
 `;
 
 function PageNumbers(props) {
-  // Props
-  const { closeModal } = props;
+  // Redux Store Actions
+  const { closeModal, changeBlob, enableApp, disableApp } = props;
 
   // State
   const [text, setText] = React.useState("<<1>>");
   const [outcome, setOutcome] = React.useState("<<1>>");
+  const [startingPage, setStartingPage] = React.useState(1);
   const [startPage, setStartPage] = React.useState(1);
   const [endPage, setEndPage] = React.useState(1);
   const [option, setOption] = React.useState("");
@@ -71,6 +76,9 @@ function PageNumbers(props) {
       setText(value);
       changeOutcome(value);
     } else if (name === "startPage") {
+      setStartPage(value);
+    } else if (name === "startingPage") {
+      // setStartingPage(value);
       startPageHelper(value);
     }
   };
@@ -98,7 +106,8 @@ function PageNumbers(props) {
   };
 
   const startPageHelper = (newStartPage) => {
-    setStartPage(newStartPage);
+    // setStartPage(newStartPage);
+    setStartingPage(newStartPage);
 
     const regex = /<<\d+>>/g;
     const searched = text.search(regex);
@@ -114,8 +123,21 @@ function PageNumbers(props) {
     }
   };
 
-  const applyPageNumbers = () => {
-    console.log("Apply page numbers!");
+  const applyPageNumbers = async () => {
+    disableApp();
+    const state = {
+      text,
+      outcome,
+      startPage,
+      endPage,
+      option,
+      startingPage,
+    };
+    const newBlob = await sendPageNumbersToBackend(state);
+    const blob = URL.createObjectURL(newBlob);
+    changeBlob(blob);
+    closeModal();
+    enableApp();
   };
 
   return (
@@ -134,9 +156,9 @@ function PageNumbers(props) {
           <label htmlFor="centerPageNumber">Starting Page Number:</label>
           <CenterTextInput
             type="number"
-            name="startPage"
+            name="startingPage"
             min="1"
-            value={startPage}
+            value={startingPage}
             onChange={onChange}
           />
         </InputContainer>
@@ -172,7 +194,7 @@ function PageNumbers(props) {
             <PageRangeInputs
               startPage={startPage}
               endPage={endPage}
-              setStartPage={startPageHelper}
+              setStartPage={setStartPage}
               setEndPage={setEndPage}
             />
           )}
@@ -216,6 +238,9 @@ function PageRangeInputs(props) {
   );
 }
 
-const { closeModal } = actions;
+const { changeBlob, enableApp, disableApp } = fileActions;
+const { closeModal } = modalsActions;
 
-export default connect(null, { closeModal })(PageNumbers);
+export default connect(null, { closeModal, changeBlob, enableApp, disableApp })(
+  PageNumbers
+);
