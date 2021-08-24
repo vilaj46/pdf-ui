@@ -49,12 +49,30 @@ function enableApp() {
     });
 }
 
+function changeFilePath(newFilePath) {
+  return (dispatch) =>
+    dispatch({
+      type: fileTypes.CHANGED_FILE_PATH,
+      payload: newFilePath,
+    });
+}
+
+function changeMetadata(newMetadata) {
+  return (dispatch) =>
+    dispatch({
+      type: fileTypes.CHANGED_METADATA,
+      payload: newMetadata,
+    });
+}
+
 const actions = {
   closeFile,
   disableApp,
   enableApp,
   changeBlob,
   uploadFile,
+  changeFilePath,
+  changeMetadata,
 };
 
 export default actions;

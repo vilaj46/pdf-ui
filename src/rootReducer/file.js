@@ -23,6 +23,16 @@ function fileReducer(state = initialState, action) {
         ...state,
         loading: true,
       };
+    case fileTypes.CHANGED_FILE_PATH:
+      return {
+        ...state,
+        filePath: action.payload,
+      };
+    case fileTypes.CHANGED_METADATA:
+      return {
+        ...state,
+        metadata: action.payload,
+      };
     default:
       return state;
   }

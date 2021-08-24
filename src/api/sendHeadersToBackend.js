@@ -1,6 +1,8 @@
 import axios from "axios";
 
-async function sendHeadersToBackend(headers) {
+async function sendHeadersToBackend(headers, file) {
+  const { fileName, filePath, metadata } = file;
+
   const filtered = headers.filter((header) => {
     const { startPage, endPage } = header;
     const rangeIsOk = checkPageRange(startPage, endPage);
@@ -19,14 +21,25 @@ async function sendHeadersToBackend(headers) {
   });
 
   formData.append("headers", JSON.stringify(dictionary));
+  formData.append("fileName", fileName);
+  formData.append("filePath", filePath);
+  formData.append("metadata", metadata);
 
   try {
     const res = await axios.post("headers/apply", formData, {
       responseType: "blob",
     });
+    const { headers } = res;
+    const filePath = headers["x-filepath"];
+    const metadata = headers["x-metadata"];
+
     if (res.status === 200) {
       const { data } = res;
-      return data;
+      return {
+        newBlob: data,
+        newFilePath: filePath,
+        newMetadata: metadata,
+      };
     }
   } catch (err) {
     return;

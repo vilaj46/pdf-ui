@@ -15,26 +15,9 @@ function closeModal() {
     });
 }
 
-// function expandModalExpansion(payload) {
-//   return (dispatch) =>
-//     dispatch({
-//       payload, // {expansion: "", expansionData: {}}
-//       type: modalTypes.EXPANDED_MODAL_EXPANSION,
-//     });
-// }
-
-// function closeModalExpansion() {
-//   return (dispatch) =>
-//     dispatch({
-//       type: modalTypes.CLOSED_MODAL_EXPANSION,
-//     });
-// }
-
 const actions = {
   expandModal,
   closeModal,
-  // closeModalExpansion,
-  // expandModalExpansion,
 };
 
 export default actions;

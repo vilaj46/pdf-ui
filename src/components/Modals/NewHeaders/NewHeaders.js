@@ -28,10 +28,17 @@ const Container = styled.section`
 
 function NewHeaders(props) {
   // Redux Actions
-  const { changeBlob, closeModal, disableApp, enableApp } = props;
+  const {
+    changeBlob,
+    closeModal,
+    disableApp,
+    enableApp,
+    changeFilePath,
+    changeMetadata,
+  } = props;
 
   // Redux State
-  const { pageCount } = props;
+  const { pageCount, fileName, filePath, metadata } = props;
 
   // State
   const [headers, setHeaders] = React.useState([]);
@@ -284,11 +291,18 @@ function NewHeaders(props) {
 
   const applyHeaders = async () => {
     disableApp();
-    const newBlob = await sendHeadersToBackend(headers);
+    const res = await sendHeadersToBackend(headers, {
+      fileName,
+      filePath,
+      metadata,
+    });
+    const { newBlob, newFilePath, newMetadata } = res;
     const blob = URL.createObjectURL(newBlob);
     changeBlob(blob);
     closeModal();
     enableApp();
+    changeFilePath(newFilePath);
+    changeMetadata(newMetadata);
   };
 
   const addPageRanges = () => {
@@ -453,7 +467,8 @@ function NewHeaders(props) {
   );
 }
 
-const { changeBlob, enableApp, disableApp } = fileActions;
+const { changeBlob, enableApp, disableApp, changeFilePath, changeMetadata } =
+  fileActions;
 const { closeModal } = modalsActions;
 
 const mapStateToProps = (state) => {
@@ -468,4 +483,6 @@ export default connect(mapStateToProps, {
   closeModal,
   enableApp,
   disableApp,
+  changeFilePath,
+  changeMetadata,
 })(NewHeaders);

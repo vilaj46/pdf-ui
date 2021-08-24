@@ -18,9 +18,15 @@ async function fileUpload(file) {
       const { data } = res;
       const { headers } = res;
       const pageCount = headers["x-pagecount"];
+      const fileName = headers["x-filename"];
+      const filePath = headers["x-filepath"];
+      const metadata = headers["x-metadata"];
       return {
         ...data,
         pageCount,
+        fileName,
+        filePath,
+        metadata,
       };
     }
   } catch (err) {

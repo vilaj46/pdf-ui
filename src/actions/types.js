@@ -4,6 +4,8 @@ const CLOSED_FILE = "CLOSED_FILE";
 const DISABLED_APP = "DISABLED_APP";
 const CHANGED_BLOB = "CHANGED_BLOB";
 const UPLOADED_FILE = "UPLOADED_FILE";
+const CHANGED_METADATA = "CHANGED_METADATA";
+const CHANGED_FILE_PATH = "CHANGED_FILE_PATH";
 
 export const fileTypes = {
   ENABLED_APP,
@@ -11,6 +13,8 @@ export const fileTypes = {
   DISABLED_APP,
   CHANGED_BLOB,
   UPLOADED_FILE,
+  CHANGED_METADATA,
+  CHANGED_FILE_PATH,
 };
 
 // Top Navigation
