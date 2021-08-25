@@ -8,7 +8,7 @@ async function fileUpload(file) {
 
   const config = {
     method: "POST",
-    url: `upload`,
+    url: `${url}upload`,
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Headers": "*",

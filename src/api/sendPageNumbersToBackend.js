@@ -28,7 +28,7 @@ async function sendPageNumbersToBackend(state) {
   formData.append("metadata", metadata);
 
   try {
-    const res = await axios.post(`pageNumbers/apply`, formData, {
+    const res = await axios.post(`${url}pageNumbers/apply`, formData, {
       responseType: "blob",
     });
     const { headers } = res;
