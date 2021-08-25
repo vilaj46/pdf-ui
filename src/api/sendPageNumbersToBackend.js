@@ -1,7 +1,10 @@
 import axios from "axios";
 
+import url from "./url";
+
 async function sendPageNumbersToBackend(state) {
-  const { startPage, endPage, text, option } = state;
+  const { startPage, endPage, text, option, fileName, filePath, metadata } =
+    state;
 
   if (option === "range") {
     const rangeIsOk = checkPageRange(startPage, endPage);
@@ -20,14 +23,24 @@ async function sendPageNumbersToBackend(state) {
 
   const formData = new FormData();
   formData.append("pageNumbers", JSON.stringify(dictionary));
+  formData.append("fileName", fileName);
+  formData.append("filePath", filePath);
+  formData.append("metadata", metadata);
 
   try {
-    const res = await axios.post("pageNumbers/apply", formData, {
+    const res = await axios.post(`${url}pageNumbers/apply`, formData, {
       responseType: "blob",
     });
+    const { headers } = res;
+    const filePath = headers["x-filepath"];
+    const metadata = headers["x-metadata"];
     if (res.status === 200) {
       const { data } = res;
-      return data;
+      return {
+        newBlob: data,
+        newFilePath: filePath,
+        newMetadata: metadata,
+      };
     }
   } catch (err) {
     return;

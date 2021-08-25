@@ -1,13 +1,14 @@
 import axios from "axios";
 
+import url from "./url";
+
 async function fileUpload(file) {
   const formData = new FormData();
   formData.append("file", file);
 
   const config = {
     method: "POST",
-    // url: "upload",
-    url: "https://pdf-ui-backend.herokuapp.com/upload",
+    url: `${url}upload`,
     headers: { "Access-Control-Allow-Origin": "*" },
     data: formData,
     responseType: "blob",

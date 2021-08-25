@@ -60,7 +60,17 @@ const Range = styled.div`
 
 function PageNumbers(props) {
   // Redux Store Actions
-  const { closeModal, changeBlob, enableApp, disableApp } = props;
+  const {
+    closeModal,
+    changeBlob,
+    enableApp,
+    disableApp,
+    changeFilePath,
+    changeMetadata,
+  } = props;
+
+  // Redux Properties
+  const { fileName, filePath, metadata } = props;
 
   // State
   const [text, setText] = React.useState("<<1>>");
@@ -132,12 +142,18 @@ function PageNumbers(props) {
       endPage,
       option,
       startingPage,
+      fileName,
+      filePath,
+      metadata,
     };
-    const newBlob = await sendPageNumbersToBackend(state);
+    const res = await sendPageNumbersToBackend(state);
+    const { newBlob, newFilePath, newMetadata } = res;
     const blob = URL.createObjectURL(newBlob);
     changeBlob(blob);
     closeModal();
     enableApp();
+    changeFilePath(newFilePath);
+    changeMetadata(newMetadata);
   };
 
   return (
@@ -238,9 +254,22 @@ function PageRangeInputs(props) {
   );
 }
 
-const { changeBlob, enableApp, disableApp } = fileActions;
+const { changeBlob, enableApp, disableApp, changeFilePath, changeMetadata } =
+  fileActions;
 const { closeModal } = modalsActions;
 
-export default connect(null, { closeModal, changeBlob, enableApp, disableApp })(
-  PageNumbers
-);
+const mapStateToProps = (state) => {
+  const { file } = state;
+  return {
+    ...file,
+  };
+};
+
+export default connect(mapStateToProps, {
+  closeModal,
+  changeBlob,
+  enableApp,
+  disableApp,
+  changeFilePath,
+  changeMetadata,
+})(PageNumbers);
