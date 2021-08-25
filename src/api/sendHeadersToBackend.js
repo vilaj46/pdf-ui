@@ -1,5 +1,7 @@
 import axios from "axios";
 
+import url from "./url";
+
 async function sendHeadersToBackend(headers, file) {
   const { fileName, filePath, metadata } = file;
 
@@ -26,7 +28,7 @@ async function sendHeadersToBackend(headers, file) {
   formData.append("metadata", metadata);
 
   try {
-    const res = await axios.post("headers/apply", formData, {
+    const res = await axios.post(`${url}headers/apply`, formData, {
       responseType: "blob",
     });
     const { headers } = res;
