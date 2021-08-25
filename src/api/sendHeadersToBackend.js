@@ -28,7 +28,7 @@ async function sendHeadersToBackend(headers, file) {
   formData.append("metadata", metadata);
 
   try {
-    const res = await axios.post(`${url}headers/apply`, formData, {
+    const res = await axios.post(`headers/apply`, formData, {
       responseType: "blob",
     });
     const { headers } = res;

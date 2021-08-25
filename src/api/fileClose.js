@@ -5,7 +5,7 @@ import url from "./url";
 async function fileClose() {
   const config = {
     method: "PUT",
-    url: `${url}upload`,
+    url: `upload`,
     headers: { "Access-Control-Allow-Origin": "*" },
   };
 
