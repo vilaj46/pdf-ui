@@ -9,7 +9,10 @@ async function fileUpload(file) {
   const config = {
     method: "POST",
     url: `${url}upload`,
-    headers: { "Access-Control-Allow-Origin": "*" },
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "*",
+    },
     data: formData,
     responseType: "blob",
   };
@@ -23,11 +26,6 @@ async function fileUpload(file) {
       const fileName = headers["x-filename"];
       const filePath = headers["x-filepath"];
       const metadata = headers["x-metadata"];
-      console.log(res);
-      console.log(pageCount);
-      console.log(fileName);
-      console.log(filePath);
-      console.log(metadata);
       return {
         ...data,
         pageCount,
