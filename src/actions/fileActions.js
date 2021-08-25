@@ -7,6 +7,7 @@ function uploadFile(payload) {
   return async function (dispatch) {
     return fileUpload(payload.file).then((res) => {
       if (res !== undefined) {
+        console.log(res);
         dispatch({
           payload: { ...payload, ...res, loading: false },
           type: fileTypes.UPLOADED_FILE,

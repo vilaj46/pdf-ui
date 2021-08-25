@@ -23,6 +23,11 @@ async function fileUpload(file) {
       const fileName = headers["x-filename"];
       const filePath = headers["x-filepath"];
       const metadata = headers["x-metadata"];
+      console.log(res);
+      console.log(pageCount);
+      console.log(fileName);
+      console.log(filePath);
+      console.log(metadata);
       return {
         ...data,
         pageCount,
