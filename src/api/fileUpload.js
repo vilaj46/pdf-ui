@@ -6,7 +6,8 @@ async function fileUpload(file) {
 
   const config = {
     method: "POST",
-    url: "upload",
+    // url: "upload",
+    url: "https://pdf-ui-backend.herokuapp.com/upload",
     headers: { "Access-Control-Allow-Origin": "*" },
     data: formData,
     responseType: "blob",
